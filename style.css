@@ -59,6 +59,19 @@ header .contact li:first-child::before {
   margin-right: 0;
 }
 
+/* ── Two-column body ────────────────────────────────────── */
+.body-columns {
+  display: grid;
+  grid-template-columns: 25% 1fr;
+  gap: 0 2.5rem;
+}
+
+/* ── Sidebar ────────────────────────────────────────────── */
+.sidebar {
+  border-right: 1px solid #ddd;
+  padding-right: 2rem;
+}
+
 /* ── Sections ───────────────────────────────────────────── */
 section {
   margin-bottom: 1.6rem;
@@ -120,20 +133,29 @@ section h2 {
   font-size: 0.88rem;
 }
 
-/* ── Skills ─────────────────────────────────────────────── */
-.skills-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.4rem 2rem;
+/* ── Sidebar entry (no flex header — narrow column) ────── */
+.sidebar .entry-title {
+  display: block;
 }
 
+.sidebar .entry-date {
+  display: block;
+  white-space: normal;
+}
+
+/* ── Skills ─────────────────────────────────────────────── */
 .skill-group {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.skill-group:last-child {
+  margin-bottom: 0;
 }
 
 .skill-label {
   font-weight: 700;
-  margin-right: 0.4rem;
+  display: block;
 }
 
 /* ── Print button ───────────────────────────────────────── */
