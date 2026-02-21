@@ -1,0 +1,182 @@
+/* ── Reset & base ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #f0f0f0;
+}
+
+/* ── Page shell ─────────────────────────────────────────── */
+.page {
+  max-width: 780px;
+  margin: 2rem auto;
+  background: #ffffff;
+  padding: 3rem 3.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+header {
+  border-bottom: 2px solid #1a1a1a;
+  padding-bottom: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+header .tagline {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 0.15rem;
+  font-style: italic;
+}
+
+header .contact {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.2rem;
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+  color: #444;
+}
+
+header .contact li::before {
+  content: '·';
+  margin-right: 0.4rem;
+  color: #999;
+}
+
+header .contact li:first-child::before {
+  content: '';
+  margin-right: 0;
+}
+
+/* ── Sections ───────────────────────────────────────────── */
+section {
+  margin-bottom: 1.6rem;
+}
+
+section h2 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.9rem;
+}
+
+/* ── Entries ────────────────────────────────────────────── */
+.entry {
+  margin-bottom: 1.1rem;
+}
+
+.entry:last-child {
+  margin-bottom: 0;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.entry-title {
+  font-weight: 700;
+  font-size: 0.97rem;
+}
+
+.entry-date {
+  font-size: 0.78rem;
+  color: #666;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.entry-sub {
+  font-size: 0.82rem;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 0.35rem;
+}
+
+.entry ul {
+  padding-left: 1.2rem;
+  margin-top: 0.35rem;
+}
+
+.entry ul li {
+  margin-bottom: 0.2rem;
+  font-size: 0.88rem;
+}
+
+/* ── Skills ─────────────────────────────────────────────── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 2rem;
+}
+
+.skill-group {
+  font-size: 0.88rem;
+}
+
+.skill-label {
+  font-weight: 700;
+  margin-right: 0.4rem;
+}
+
+/* ── Print button ───────────────────────────────────────── */
+.print-button {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+.print-button button {
+  padding: 0.55rem 1.6rem;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  transition: background 0.15s;
+}
+
+.print-button button:hover {
+  background: #444;
+}
+
+/* ── Print styles ───────────────────────────────────────── */
+@media print {
+  body { background: #fff; }
+
+  .page {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    max-width: 100%;
+  }
+
+  .no-print { display: none !important; }
+
+  section { page-break-inside: avoid; }
+  .entry  { page-break-inside: avoid; }
+
+  @page {
+    margin: 1.8cm 2cm;
+    size: A4;
+  }
+}

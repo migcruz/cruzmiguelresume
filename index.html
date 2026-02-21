@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>John Doe — Resume</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <h1>John Doe</h1>
+      <p class="tagline">Software Engineer</p>
+      <ul class="contact">
+        <li>john.doe@email.com</li>
+        <li>(555) 123-4567</li>
+        <li>San Francisco, CA</li>
+        <li>linkedin.com/in/johndoe</li>
+        <li>github.com/johndoe</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <p>
+        Results-driven software engineer with 5+ years of experience building scalable
+        web applications. Passionate about clean code, developer tooling, and shipping
+        products that users love.
+      </p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Senior Software Engineer</span>
+          <span class="entry-date">Jan 2022 — Present</span>
+        </div>
+        <div class="entry-sub">Acme Corp · San Francisco, CA</div>
+        <ul>
+          <li>Led a team of 4 engineers to redesign the core API, reducing average response time by 40%.</li>
+          <li>Architected a microservices migration from a monolithic Rails app, enabling independent deployments.</li>
+          <li>Introduced end-to-end testing with Playwright, cutting production bug reports by 30%.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Software Engineer</span>
+          <span class="entry-date">Jun 2019 — Dec 2021</span>
+        </div>
+        <div class="entry-sub">Startup Inc · Remote</div>
+        <ul>
+          <li>Built real-time collaboration features using WebSockets, serving 10k+ concurrent users.</li>
+          <li>Developed a CI/CD pipeline with GitHub Actions and Docker, cutting deployment time by 50%.</li>
+          <li>Mentored two junior engineers through weekly code reviews and pair programming sessions.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Software Engineering Intern</span>
+          <span class="entry-date">May 2018 — Aug 2018</span>
+        </div>
+        <div class="entry-sub">Tech Solutions LLC · Austin, TX</div>
+        <ul>
+          <li>Delivered a customer-facing dashboard feature in React that became part of the core product.</li>
+          <li>Wrote unit tests that increased overall code coverage from 62% to 80%.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">B.S. Computer Science</span>
+          <span class="entry-date">2015 — 2019</span>
+        </div>
+        <div class="entry-sub">University of Texas at Austin</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <span class="skill-label">Languages</span>
+          <span>TypeScript, Python, Go, SQL</span>
+        </div>
+        <div class="skill-group">
+          <span class="skill-label">Frameworks</span>
+          <span>React, Node.js, Next.js, FastAPI</span>
+        </div>
+        <div class="skill-group">
+          <span class="skill-label">Infrastructure</span>
+          <span>Docker, Kubernetes, AWS, Terraform</span>
+        </div>
+        <div class="skill-group">
+          <span class="skill-label">Tools</span>
+          <span>Git, PostgreSQL, Redis, GitHub Actions</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">OpenNotes</span>
+          <span class="entry-date">github.com/johndoe/opennotes</span>
+        </div>
+        <div class="entry-sub">Open-source markdown note-taking app · 1.2k GitHub stars</div>
+        <ul>
+          <li>Built with Next.js and Supabase; supports offline sync and real-time sharing.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">devpulse</span>
+          <span class="entry-date">github.com/johndoe/devpulse</span>
+        </div>
+        <div class="entry-sub">CLI tool for monitoring GitHub repo activity</div>
+        <ul>
+          <li>Written in Go; aggregates PR, issue, and commit stats across multiple orgs.</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="print-button no-print">
+    <button onclick="window.print()">Save as PDF</button>
+  </div>
+</body>
+</html>
