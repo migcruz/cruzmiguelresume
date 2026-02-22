@@ -30,7 +30,7 @@ There is no build step for the HTML — it is the source, not a generated artifa
 
 Two-column grid: `20% sidebar | 1fr main`.
 
-- **Sidebar** (left 20%): Contact, Education, Skills — grey background (`#f6f6f6`), `padding: 2mm`, no border
+- **Sidebar** (left 20%): Contact, Education, Skills — grey background (`#f5f7f7`), `padding: 2mm`, no border
 - **Main column** (right): Professional Summary, Professional Experience — `padding-top: 2mm` to align first section with sidebar content
 - **Header** (full width, above both columns): Name only — no tagline
 
@@ -100,6 +100,10 @@ The `@media print` block has rules critical for correct PDF output. Key decision
 | Body text size | `11–12px` range | Explicit per section, not inherited |
 | Side margins | `10mm` | Safe margin for modern printers |
 | Page footer | `5mm` strip, floated spans | Name left (float left), LinkedIn right (float right). `margin-top: auto` only works in browser (flex column); in PDF footer falls naturally after content |
+| Text color | `#283135` | CMYK 69, 62, 59, 49 converted to hex. Used on `body`, `section h2`, contact list |
+| Grey backgrounds | `#f5f7f7` | CMYK 4, 3, 3, 0 converted to hex. Used on header and sidebar |
+
+**Color note:** CSS does not support CMYK values. Always convert CMYK to hex before applying. Formula: `R = 255 × (1 − C%) × (1 − K%)`, same for G and B. `device-cmyk()` exists in CSS Color Level 4 but is not reliably supported by WeasyPrint or browsers.
 
 ---
 
