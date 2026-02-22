@@ -35,21 +35,21 @@ The container runs WeasyPrint against `index.html`, mounts the host `./build` di
 
 ```mermaid
 flowchart TD
-    src["Source Files\nindex.html · style.css"]
+    src["index.html · style.css"]
 
     subgraph preview["Live Preview (editing)"]
-        LS["Live Server\nVSCode Extension"]
-        BR["Browser\nlocalhost"]
-        GF["Google Fonts\nCormorant Garamond · Geist Sans"]
+        LS["Live Server"]
+        BR["Browser"]
+        GF["Google Fonts"]
         src --> LS --> BR
         GF -->|loaded at runtime| BR
     end
 
     subgraph docker["PDF Generation (Docker)"]
         DC["docker compose up --build"]
-        IMG["Docker Image\npython:3-slim + WeasyPrint"]
-        WP["WeasyPrint\nHTML → PDF"]
-        VOL[("./build/\nresume.pdf")]
+        IMG["python:3-slim + WeasyPrint"]
+        WP["WeasyPrint"]
+        VOL[("build/resume.pdf")]
         src --> DC --> IMG --> WP --> VOL
     end
 ```
