@@ -3,6 +3,7 @@
 
 body {
   font-family: 'Geist Sans', sans-serif;
+  font-weight: 300;
   line-height: 1.6;
   color: #1a1a1a;
   background: #f0f0f0;
@@ -14,55 +15,50 @@ body {
   min-height: 297mm;
   margin: 2rem auto;
   background: #ffffff;
-  padding: 18mm 20mm;
+  padding: 18mm 10mm;
   box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Header ─────────────────────────────────────────────── */
 header {
-  border-bottom: 2px solid #1a1a1a;
-  padding-bottom: 12px;
+  background: #f6f6f6;
+  margin-top: -18mm;
+  margin-left: -10mm;
+  margin-right: -10mm;
   margin-bottom: 20px;
+  height: 30mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 header h1 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 36px;
-  font-weight: 700;
+  font-size: 48px;
+  font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   text-align: center;
 }
 
-header .tagline {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 9px;
-  color: #666;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-top: 6px;
-}
-
-header .tagline::before,
-header .tagline::after {
-  content: '';
-  flex: 1;
-  border-top: 1px solid #bbb;
-}
-
 /* ── Two-column body ────────────────────────────────────── */
 .body-columns {
   display: grid;
-  grid-template-columns: 25% 1fr;
+  grid-template-columns: 20% 1fr;
   gap: 0 30px;
+  flex: 1;
 }
 
 /* ── Sidebar ────────────────────────────────────────────── */
 .sidebar {
-  border-right: 1px solid #ddd;
-  padding-right: 24px;
+  background: #f6f6f6;
+  padding: 2mm;
+}
+
+.main-col {
+  padding-top: 2mm;
 }
 
 /* ── Section labels (shared) ────────────────────────────── */
@@ -71,7 +67,7 @@ section {
 }
 
 section h2 {
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #555;
@@ -102,7 +98,7 @@ section h2 {
 
 .sidebar .entry-title {
   display: block;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 11px;
 }
 
@@ -133,7 +129,8 @@ section h2 {
 }
 
 .skill-label {
-  font-weight: 700;
+  font-weight: 500;
+  font-size: 11px;
   display: block;
 }
 
@@ -167,7 +164,7 @@ section h2 {
 }
 
 .entry-title {
-  font-weight: 700;
+  font-weight: 500;
   font-size: 12px;
 }
 
@@ -193,6 +190,18 @@ section h2 {
 .entry ul li {
   margin-bottom: 2px;
   font-size: 11px;
+}
+
+/* ── Page footer ────────────────────────────────────────── */
+.page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 5mm;
+  margin-top: auto;
+  border-top: 1px solid #ddd;
+  font-size: 9px;
+  color: #888;
 }
 
 /* ── Print button ───────────────────────────────────────── */

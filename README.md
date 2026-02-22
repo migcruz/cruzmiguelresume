@@ -4,15 +4,40 @@ A print-ready HTML/CSS resume that uses [WeasyPrint](https://weasyprint.org/) in
 
 ## Prerequisites
 
-- [Docker](https://docs.docker.com/engine/install/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+- Docker + Docker Compose
 
-**Arch Linux quick install:**
+**Arch Linux:**
 ```bash
 sudo pacman -S docker docker-compose
 sudo systemctl enable --now docker
 sudo usermod -aG docker $USER
 newgrp docker
+```
+
+**macOS** — uses [Homebrew](https://brew.sh/) and [Colima](https://github.com/abiosoft/colima) as the Docker runtime:
+```bash
+brew install colima docker docker-compose
+colima start          # starts the Docker daemon (run this each session, or add to login items)
+```
+
+**Windows** — install Docker Engine inside WSL 2 (run in PowerShell as Administrator, then inside the WSL terminal):
+```powershell
+# 1. Enable WSL 2
+wsl --install         # installs Ubuntu by default, then restart
+```
+```bash
+# 2. Inside the WSL terminal — install Docker Engine
+sudo apt-get update && sudo apt-get install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo service docker start
+sudo usermod -aG docker $USER && newgrp docker
 ```
 
 ## Usage
