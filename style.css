@@ -29,9 +29,8 @@ header {
   margin-right: -10mm;
   margin-bottom: 20px;
   height: 30mm;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  line-height: 30mm;
 }
 
 header h1 {
@@ -194,15 +193,17 @@ section h2 {
 
 /* ── Page footer ────────────────────────────────────────── */
 .page-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  overflow: hidden;
   height: 5mm;
+  line-height: 5mm;
   margin-top: auto;
   border-top: 1px solid #ddd;
   font-size: 9px;
   color: #888;
 }
+
+.page-footer span:first-child { float: left; }
+.page-footer span:last-child  { float: right; }
 
 /* ── Print button ───────────────────────────────────────── */
 .print-button {
@@ -237,6 +238,7 @@ section h2 {
     box-shadow: none;
     width: 100%;
     min-height: unset;
+    display: block;
   }
 
   .no-print { display: none !important; }
@@ -245,7 +247,7 @@ section h2 {
   .entry  { page-break-inside: avoid; }
 
   @page {
-    margin: 1.8cm 2cm;
+    margin: 18mm 10mm;
     size: A4;
   }
 }

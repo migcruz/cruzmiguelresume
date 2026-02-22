@@ -18,7 +18,7 @@ There is no build step for the HTML — it is the source, not a generated artifa
 |---|---|
 | `index.html` | Resume content and structure |
 | `style.css` | All styling. Divided into clearly labelled section blocks |
-| `Dockerfile` | `python:3-slim` + WeasyPrint system deps + pip install |
+| `Dockerfile` | `python:3.12-slim` + WeasyPrint system deps + pip install |
 | `docker-compose.yml` | Builds image, mounts `./build` volume, runs WeasyPrint, exits |
 | `.gitignore` | Ignores `build/` directory |
 | `README.md` | User-facing docs with usage, Mermaid diagram, and TODO list |
@@ -63,7 +63,7 @@ The `h2` font sizes per section use CSS `:has()` selectors:
 `.page` uses `width: 210mm; min-height: 297mm` with `padding: 18mm 10mm` (10mm side margins — safe modern printer margin). This is intentional — the page should always look like A4 regardless of font size changes.
 
 ### Header is fixed height
-The header uses `height: 30mm` with `display: flex; align-items: center; justify-content: center` to vertically and horizontally center the name. This means changing `font-size` on `header h1` does **not** affect the header height or push content down. Adjust `height` on `header` if you want more/less breathing room.
+The header uses `height: 30mm` with `text-align: center; line-height: 30mm` to center the name — **not flexbox**. Flex was intentionally removed after discovering WeasyPrint crashes on nested flex containers (`.page` is already flex, so `header` having `display: flex` triggered a layout bug). `line-height: 30mm` vertically centers single-line text within the fixed-height box. Changing `font-size` on `header h1` does **not** affect the header height or push content down.
 
 The grey background bleeds to the page top edge via the negative margin trick:
 ```css
@@ -74,6 +74,14 @@ header {
   height: 30mm;
 }
 ```
+
+### Print / WeasyPrint CSS architecture
+The `@media print` block has rules critical for correct PDF output. Key decisions:
+
+- **`.page { display: block }`** — overrides the screen `display: flex`. Without this, WeasyPrint interprets `flex: 1` on `.body-columns` as "fill the entire page height," stretching the grid across 3+ pages.
+- **`@page { margin: 18mm 10mm }`** — must exactly match `.page { padding: 18mm 10mm }` on screen. The @page margins become the PDF margins (`.page` gets `padding: 0` in print). Mismatching these was the original cause of "extra margins" in the PDF.
+- **`display: flex` must not appear inside `.page` in print** — `.page-footer` uses floats instead of flex for left/right layout. `.entry-header` still uses flex but it is nested deeper (inside `.body-columns → .main-col → section → .entry`) and does not directly trigger the WeasyPrint flex bug.
+- **`margin-top: auto` on `.page-footer` has no effect in print** — because `.page` is `display: block` in print. The footer just falls naturally after content. The @page bottom margin provides visual spacing.
 
 ### Fonts load from Google Fonts
 `Cormorant Garamond` (weights 300, 400, 700) and `Geist Sans` (weights 300–700 variable range) are loaded via `<link>` tags in `index.html`. This requires an internet connection. **The Docker container does not have internet access at runtime**, so WeasyPrint will fall back to system fonts (`fonts-dejavu`, `fonts-liberation` are installed in the image). The PDF will not match the browser preview exactly until fonts are self-hosted (see TODO).
@@ -87,11 +95,11 @@ header {
 | Name font | Cormorant Garamond 400 | Serif, centered, uppercase, `letter-spacing: 0.2em` |
 | Body font | Geist Sans 300 | Light weight — deliberately thin for a clean look |
 | Section h2 | Geist Sans 500 | Slightly heavier than body for contrast without being bold |
-| Header | Fixed `30mm` height, flexbox centered | Font-size changes don't affect layout |
+| Header | Fixed `30mm` height, `line-height` centered | No flex — avoids WeasyPrint nested flex crash |
 | Page size | A4 fixed (`210mm × 297mm`) | Not responsive — intentional |
 | Body text size | `11–12px` range | Explicit per section, not inherited |
 | Side margins | `10mm` | Safe margin for modern printers |
-| Page footer | `5mm` strip, `margin-top: auto` | Name left, LinkedIn right, pushed to page bottom by flex column |
+| Page footer | `5mm` strip, floated spans | Name left (float left), LinkedIn right (float right). `margin-top: auto` only works in browser (flex column); in PDF footer falls naturally after content |
 
 ---
 
@@ -102,6 +110,10 @@ header {
 3. **`min-height` on `.page`** — If content overflows A4, a second page is created. This is intentional. WeasyPrint handles page breaks via `page-break-inside: avoid` on `.entry` and `section`.
 4. **`section:first-child` / `section:last-child`** — Summary is targeted as `:first-child` and Experience as `:last-child` inside `.main-col`. If a new section is added between them, these selectors will break and explicit classes will be needed.
 5. **`.main-col` padding-top** — Set to `2mm` to align Professional Summary with the Contact section in the sidebar (which has `padding: 2mm`). If sidebar padding changes, update `.main-col { padding-top }` to match.
+6. **WeasyPrint + nested flex = crash** — WeasyPrint crashes with `ValueError: too many values to unpack` when a flex container (`.page`) contains children that are also flex containers. Fixed by: (a) using `text-align/line-height` instead of flex in `header`, (b) using floats instead of flex in `.page-footer`, (c) adding `display: block` to `.page` in `@media print`.
+7. **Python version must be pinned to `3.12-slim`** — `python:3-slim` resolves to Python 3.14+ which has WeasyPrint incompatibilities. Always use `FROM python:3.12-slim` in the Dockerfile.
+8. **`flex: 1` on `.body-columns` causes multi-page PDF** — WeasyPrint interprets `flex: 1` literally when `.page` is a flex column, stretching the grid to fill the entire page height and causing content to fragment across 3+ pages. Fixed by adding `display: block` to `.page` in `@media print`, which deactivates flex entirely for the PDF render.
+9. **`@page` margins must match `.page` padding** — In print, `.page` gets `padding: 0`. The only effective margins become those set by `@page`. If `@page { margin }` differs from the screen `.page { padding }`, the PDF will have different margins than the browser preview. Current values: both `18mm 10mm`.
 
 ---
 
