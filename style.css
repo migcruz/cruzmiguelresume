@@ -2,8 +2,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Georgia', serif;
-  font-size: 14px;
+  font-family: 'Geist Sans', sans-serif;
   line-height: 1.6;
   color: #1a1a1a;
   background: #f0f0f0;
@@ -11,142 +10,122 @@ body {
 
 /* ── Page shell ─────────────────────────────────────────── */
 .page {
-  max-width: 780px;
+  width: 210mm;
+  min-height: 297mm;
   margin: 2rem auto;
   background: #ffffff;
-  padding: 3rem 3.5rem;
+  padding: 18mm 20mm;
   box-shadow: 0 4px 24px rgba(0,0,0,0.12);
 }
 
 /* ── Header ─────────────────────────────────────────────── */
 header {
   border-bottom: 2px solid #1a1a1a;
-  padding-bottom: 1rem;
-  margin-bottom: 1.6rem;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 header h1 {
-  font-size: 2.2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 header .tagline {
-  font-size: 1rem;
-  color: #555;
-  margin-top: 0.15rem;
-  font-style: italic;
-}
-
-header .contact {
-  list-style: none;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem 1.2rem;
-  margin-top: 0.6rem;
-  font-size: 0.82rem;
-  color: #444;
+  align-items: center;
+  gap: 9px;
+  font-size: 9px;
+  color: #666;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 6px;
 }
 
-header .contact li::before {
-  content: '·';
-  margin-right: 0.4rem;
-  color: #999;
-}
-
-header .contact li:first-child::before {
+header .tagline::before,
+header .tagline::after {
   content: '';
-  margin-right: 0;
+  flex: 1;
+  border-top: 1px solid #bbb;
 }
 
 /* ── Two-column body ────────────────────────────────────── */
 .body-columns {
   display: grid;
   grid-template-columns: 25% 1fr;
-  gap: 0 2.5rem;
+  gap: 0 30px;
 }
 
 /* ── Sidebar ────────────────────────────────────────────── */
 .sidebar {
   border-right: 1px solid #ddd;
-  padding-right: 2rem;
+  padding-right: 24px;
 }
 
-/* ── Sections ───────────────────────────────────────────── */
+/* ── Section labels (shared) ────────────────────────────── */
 section {
-  margin-bottom: 1.6rem;
+  margin-bottom: 18px;
 }
 
 section h2 {
-  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #555;
   border-bottom: 1px solid #ddd;
-  padding-bottom: 0.25rem;
-  margin-bottom: 0.9rem;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
 }
 
-/* ── Entries ────────────────────────────────────────────── */
-.entry {
-  margin-bottom: 1.1rem;
+/* ─────────────────────────────────────────────────────────
+   CONTACT
+───────────────────────────────────────────────────────── */
+.sidebar section:has(.contact) h2 { font-size: 14px; }
+
+.contact {
+  list-style: none;
+  font-size: 10px;
+  color: #444;
 }
 
-.entry:last-child {
-  margin-bottom: 0;
+.contact li {
+  margin-bottom: 4px;
 }
 
-.entry-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-}
+/* ─────────────────────────────────────────────────────────
+   EDUCATION
+───────────────────────────────────────────────────────── */
+.sidebar section:has(.entry) h2 { font-size: 14px; }
 
-.entry-title {
-  font-weight: 700;
-  font-size: 0.97rem;
-}
-
-.entry-date {
-  font-size: 0.78rem;
-  color: #666;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.entry-sub {
-  font-size: 0.82rem;
-  color: #555;
-  font-style: italic;
-  margin-bottom: 0.35rem;
-}
-
-.entry ul {
-  padding-left: 1.2rem;
-  margin-top: 0.35rem;
-}
-
-.entry ul li {
-  margin-bottom: 0.2rem;
-  font-size: 0.88rem;
-}
-
-/* ── Sidebar entry (no flex header — narrow column) ────── */
 .sidebar .entry-title {
   display: block;
+  font-weight: 700;
+  font-size: 11px;
 }
 
 .sidebar .entry-date {
   display: block;
-  white-space: normal;
+  font-size: 10px;
+  color: #666;
 }
 
-/* ── Skills ─────────────────────────────────────────────── */
+.sidebar .entry-sub {
+  font-size: 10px;
+  color: #555;
+  font-style: italic;
+}
+
+/* ─────────────────────────────────────────────────────────
+   SKILLS
+───────────────────────────────────────────────────────── */
+.sidebar section:has(.skill-group) h2 { font-size: 14px; }
+
 .skill-group {
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
+  font-size: 10px;
+  margin-bottom: 6px;
 }
 
 .skill-group:last-child {
@@ -158,19 +137,77 @@ section h2 {
   display: block;
 }
 
+/* ─────────────────────────────────────────────────────────
+   PROFESSIONAL SUMMARY
+───────────────────────────────────────────────────────── */
+.main-col section:first-child h2 { font-size: 14px; }
+
+.main-col section:first-child p {
+  font-size: 11px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   PROFESSIONAL EXPERIENCE
+───────────────────────────────────────────────────────── */
+.main-col section:last-child h2 { font-size: 14px; }
+
+.entry {
+  margin-bottom: 14px;
+}
+
+.entry:last-child {
+  margin-bottom: 0;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.entry-title {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.entry-date {
+  font-size: 10px;
+  color: #666;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.entry-sub {
+  font-size: 10px;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.entry ul {
+  padding-left: 14px;
+  margin-top: 4px;
+}
+
+.entry ul li {
+  margin-bottom: 2px;
+  font-size: 11px;
+}
+
 /* ── Print button ───────────────────────────────────────── */
 .print-button {
   display: flex;
   justify-content: center;
-  padding: 1.5rem 0;
+  padding: 24px 0;
 }
 
 .print-button button {
-  padding: 0.55rem 1.6rem;
+  padding: 7px 20px;
   background: #1a1a1a;
   color: #fff;
   border: none;
-  font-size: 0.9rem;
+  font-size: 12px;
   cursor: pointer;
   border-radius: 4px;
   letter-spacing: 0.04em;
@@ -189,7 +226,8 @@ section h2 {
     margin: 0;
     padding: 0;
     box-shadow: none;
-    max-width: 100%;
+    width: 100%;
+    min-height: unset;
   }
 
   .no-print { display: none !important; }
