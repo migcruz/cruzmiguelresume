@@ -1,10 +1,46 @@
+/* ── Self-hosted fonts ──────────────────────────────────── */
+@font-face {
+  font-family: 'Geist Sans';
+  font-weight: 300;
+  font-style: normal;
+  src: url('fonts/geist-sans/Geist-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Geist Sans';
+  font-weight: 300;
+  font-style: italic;
+  src: url('fonts/geist-sans/Geist-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Geist Sans';
+  font-weight: 400;
+  font-style: normal;
+  src: url('fonts/geist-sans/Geist-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Geist Sans';
+  font-weight: 500;
+  font-style: normal;
+  src: url('fonts/geist-sans/Geist-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-weight: 400;
+  font-style: normal;
+  src: url('fonts/cormorant-garamond/CormorantGaramond-Regular.ttf') format('truetype');
+}
+
 /* ── Reset & base ───────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Geist Sans', sans-serif;
   font-weight: 300;
-  line-height: 1.6;
+  line-height: 1.60;
   color: #283135;
   background: #f0f0f0;
 }
@@ -15,7 +51,7 @@ body {
   min-height: 297mm;
   margin: 2rem auto;
   background: #ffffff;
-  padding: 18mm 10mm;
+  padding: 18mm 10mm 10mm;
   box-shadow: 0 4px 24px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
@@ -90,15 +126,46 @@ section h2 {
   margin-bottom: 4px;
 }
 
+.contact-linkedin {
+  font-size: 10px;
+}
+
+.contact-linkedin a {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.contact-github {
+  font-size: 10px;
+}
+
+.contact-github a {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
 /* ─────────────────────────────────────────────────────────
    EDUCATION
 ───────────────────────────────────────────────────────── */
+.sidebar section:has(.entry) { margin-top: 45px; } /* tune to align with Professional Experience h2 */
 .sidebar section:has(.entry) h2 { font-size: 14px; }
 
 .sidebar .entry-title {
   display: block;
   font-weight: 500;
   font-size: 11px;
+}
+
+.sidebar .entry-degree {
+  display: block;
+  font-size: 10px;
+  color: #666;
 }
 
 .sidebar .entry-date {
@@ -131,6 +198,16 @@ section h2 {
   font-weight: 500;
   font-size: 11px;
   display: block;
+}
+
+.skill-list {
+  list-style: none;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.skill-list li {
+  margin-bottom: 1px;
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -175,10 +252,20 @@ section h2 {
 }
 
 .entry-sub {
-  font-size: 10px;
-  color: #555;
-  font-style: italic;
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 4px;
+}
+
+.entry-company {
+  font-size: 10px;
+  color: #283135;
+  font-style: italic;
+}
+
+.entry-location {
+  font-size: 10px;
+  color: #283135;
 }
 
 .entry ul {
@@ -196,9 +283,9 @@ section h2 {
   overflow: hidden;
   height: 5mm;
   line-height: 5mm;
-  margin-top: auto;
+  margin-top: 3px;
   border-top: 1px solid #ddd;
-  font-size: 9px;
+  font-size: 10px;
   color: #888;
 }
 
@@ -243,11 +330,10 @@ section h2 {
 
   .no-print { display: none !important; }
 
-  section { page-break-inside: avoid; }
   .entry  { page-break-inside: avoid; }
 
   @page {
-    margin: 18mm 10mm;
+    margin: 18mm 10mm 10mm;
     size: A4;
   }
 }

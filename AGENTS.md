@@ -79,12 +79,28 @@ header {
 The `@media print` block has rules critical for correct PDF output. Key decisions:
 
 - **`.page { display: block }`** — overrides the screen `display: flex`. Without this, WeasyPrint interprets `flex: 1` on `.body-columns` as "fill the entire page height," stretching the grid across 3+ pages.
-- **`@page { margin: 18mm 10mm }`** — must exactly match `.page { padding: 18mm 10mm }` on screen. The @page margins become the PDF margins (`.page` gets `padding: 0` in print). Mismatching these was the original cause of "extra margins" in the PDF.
+- **`@page { margin: 18mm 10mm 10mm }`** — 3-value shorthand: top 18mm, sides 10mm, bottom 10mm. Must match `.page { padding: 18mm 10mm 10mm }` on screen. The @page margins become the PDF margins (`.page` gets `padding: 0` in print). Mismatching these was the original cause of "extra margins" in the PDF. The top is 18mm (not 10mm) because the header uses `margin-top: -18mm` to bleed to the page edge — the bottom has no such bleed so it uses 10mm like the sides.
 - **`display: flex` must not appear inside `.page` in print** — `.page-footer` uses floats instead of flex for left/right layout. `.entry-header` still uses flex but it is nested deeper (inside `.body-columns → .main-col → section → .entry`) and does not directly trigger the WeasyPrint flex bug.
 - **`margin-top: auto` on `.page-footer` has no effect in print** — because `.page` is `display: block` in print. The footer just falls naturally after content. The @page bottom margin provides visual spacing.
 
-### Fonts load from Google Fonts
-`Cormorant Garamond` (weights 300, 400, 700) and `Geist Sans` (weights 300–700 variable range) are loaded via `<link>` tags in `index.html`. This requires an internet connection. **The Docker container does not have internet access at runtime**, so WeasyPrint will fall back to system fonts (`fonts-dejavu`, `fonts-liberation` are installed in the image). The PDF will not match the browser preview exactly until fonts are self-hosted (see TODO).
+### Fonts are self-hosted
+Google Fonts links have been removed from `index.html`. Both fonts are loaded via `@font-face` in `style.css` using local TTF files copied into the Docker image.
+
+Font files live in:
+```
+fonts/
+  geist-sans/
+    Geist-Light.ttf        (weight 300, normal)
+    Geist-LightItalic.ttf  (weight 300, italic — needed for .entry-company)
+    Geist-Regular.ttf      (weight 400, normal)
+    Geist-Medium.ttf       (weight 500, normal)
+  cormorant-garamond/
+    CormorantGaramond-Regular.ttf  (weight 400, normal)
+```
+
+The Dockerfile has `COPY fonts/ ./fonts/` to bundle them into the image. **If you add a new font weight or style, you must add both the TTF file and a matching `@font-face` block in `style.css`, then rebuild the Docker image.**
+
+WeasyPrint does NOT synthesize italic if no italic `@font-face` is declared — unlike browsers which oblique-skew the regular variant. Always declare an explicit italic face when `font-style: italic` is used on any element.
 
 ---
 
@@ -100,6 +116,8 @@ The `@media print` block has rules critical for correct PDF output. Key decision
 | Body text size | `11–12px` range | Explicit per section, not inherited |
 | Side margins | `10mm` | Safe margin for modern printers |
 | Page footer | `5mm` strip, floated spans | Name left (float left), LinkedIn right (float right). `margin-top: auto` only works in browser (flex column); in PDF footer falls naturally after content |
+| Skills layout | `<ul class="skill-list">` per group | Each skill is its own `<li>`, one per line. `.skill-label` is a `<span>` above the list |
+| Contact icons | Inline SVG + `<a>` hyperlink | LinkedIn and GitHub have path-based SVG icons. Links are preserved as PDF annotations by WeasyPrint |
 | Text color | `#283135` | CMYK 69, 62, 59, 49 converted to hex. Used on `body`, `section h2`, contact list |
 | Grey backgrounds | `#f5f7f7` | CMYK 4, 3, 3, 0 converted to hex. Used on header and sidebar |
 
@@ -110,14 +128,16 @@ The `@media print` block has rules critical for correct PDF output. Key decision
 ## Known gotchas
 
 1. **`:has()` in WeasyPrint** — May not render section `h2` sizes correctly in PDF. Verify after any Docker run. Workaround: add explicit classes like `class="section-contact"` to each `<section>` and scope styles to those.
-2. **Google Fonts in Docker** — Container has no internet at runtime. Fonts fall back silently. PDF ≠ browser until fonts are bundled locally.
-3. **`min-height` on `.page`** — If content overflows A4, a second page is created. This is intentional. WeasyPrint handles page breaks via `page-break-inside: avoid` on `.entry` and `section`.
+2. ~~**Google Fonts in Docker**~~ — Resolved. Fonts are now self-hosted. No internet dependency at runtime.
+3. **`min-height` on `.page`** — If content overflows A4, a second page is created. WeasyPrint handles page breaks via `page-break-inside: avoid` on `.entry` only. `section { page-break-inside: avoid }` was intentionally **removed** — it caused WeasyPrint to push the entire Professional Experience section (all 4+ entries) to page 2 as an unbreakable block, leaving a large gap on page 1.
 4. **`section:first-child` / `section:last-child`** — Summary is targeted as `:first-child` and Experience as `:last-child` inside `.main-col`. If a new section is added between them, these selectors will break and explicit classes will be needed.
 5. **`.main-col` padding-top** — Set to `2mm` to align Professional Summary with the Contact section in the sidebar (which has `padding: 2mm`). If sidebar padding changes, update `.main-col { padding-top }` to match.
 6. **WeasyPrint + nested flex = crash** — WeasyPrint crashes with `ValueError: too many values to unpack` when a flex container (`.page`) contains children that are also flex containers. Fixed by: (a) using `text-align/line-height` instead of flex in `header`, (b) using floats instead of flex in `.page-footer`, (c) adding `display: block` to `.page` in `@media print`.
 7. **Python version must be pinned to `3.12-slim`** — `python:3-slim` resolves to Python 3.14+ which has WeasyPrint incompatibilities. Always use `FROM python:3.12-slim` in the Dockerfile.
 8. **`flex: 1` on `.body-columns` causes multi-page PDF** — WeasyPrint interprets `flex: 1` literally when `.page` is a flex column, stretching the grid to fill the entire page height and causing content to fragment across 3+ pages. Fixed by adding `display: block` to `.page` in `@media print`, which deactivates flex entirely for the PDF render.
-9. **`@page` margins must match `.page` padding** — In print, `.page` gets `padding: 0`. The only effective margins become those set by `@page`. If `@page { margin }` differs from the screen `.page { padding }`, the PDF will have different margins than the browser preview. Current values: both `18mm 10mm`.
+9. **`@page` margins must match `.page` padding** — In print, `.page` gets `padding: 0`. The only effective margins become those set by `@page`. If `@page { margin }` differs from the screen `.page { padding }`, the PDF will have different margins than the browser preview. Current values: both `18mm 10mm 10mm` (top 18mm, sides 10mm, bottom 10mm).
+10. **WeasyPrint does not synthesize italic** — Unlike browsers, WeasyPrint will not oblique-skew a regular font when `font-style: italic` is used. An explicit `@font-face` with `font-style: italic` pointing to an italic TTF is required. Currently declared for Geist Sans weight 300 (`Geist-LightItalic.ttf`). If italic is needed at other weights, add the corresponding TTF + `@font-face` block.
+11. **Contact icons are inline SVG** — LinkedIn and GitHub entries use inline `<svg>` path data (no external icon library). LinkedIn icon uses `fill="#283135"` (matches resume text color, not LinkedIn blue). GitHub icon uses `fill="currentColor"` (inherits text color). Both are wrapped in `<a>` tags — WeasyPrint preserves these as clickable PDF link annotations.
 
 ---
 
@@ -127,5 +147,5 @@ The `@media print` block has rules critical for correct PDF output. Key decision
 2. **CI/CD with GitHub Actions** — Auto-generate PDF on push to `main`, attach as release artifact.
 3. **Tailored resume variants** — Multiple YAML files for different roles, one compose run generates all.
 4. **PDF hot-reload watcher** — `docker compose watch` or `watchdog` Python lib to re-run WeasyPrint on file save.
-5. **Self-hosted fonts** — Download Cormorant Garamond + Geist Sans `.woff2` files, reference via `@font-face`. Fixes the Docker font mismatch.
+5. ~~**Self-hosted fonts**~~ — **Done.** Geist Sans (300, 300i, 400, 500) and Cormorant Garamond (400) are bundled as TTF files in `fonts/` and loaded via `@font-face`. Google Fonts link removed.
 6. **Content validation** — Schema check on YAML before render (depends on TODO #1).

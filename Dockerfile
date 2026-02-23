@@ -14,5 +14,6 @@ RUN pip install --no-cache-dir weasyprint
 
 WORKDIR /app
 COPY index.html style.css ./
+COPY fonts/ ./fonts/
 
 CMD ["sh", "-c", "mkdir -p /build && weasyprint index.html /build/resume.pdf && echo 'PDF written to /build/resume.pdf'"]

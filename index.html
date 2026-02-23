@@ -3,10 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>John Doe — Resume</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;700&family=Geist+Sans:wght@300..700&display=swap" rel="stylesheet" />
+  <title>Miguel Cruz — Resume</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -23,40 +20,74 @@
         <section>
           <h2>Contact</h2>
           <ul class="contact">
-            <li>john.doe@email.com</li>
-            <li>(555) 123-4567</li>
+            <li>miguel.vale.cruz@gmail.com</li>
+            <li>(604) 626-9579</li>
             <li>Bothell, WA</li>
-            <li>linkedin.com/in/johndoe</li>
-            <li>github.com/johndoe</li>
+            <li class="contact-github">
+              <a href="https://github.com/migcruz">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="9" height="9">
+                  <path fill="currentColor" d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+                migcruz
+              </a>
+            </li>
+            <li class="contact-linkedin">
+              <a href="https://linkedin.com/in/miguelramoncruz">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="9" height="9">
+                  <rect width="24" height="24" rx="4" fill="#283135"/>
+                  <path fill="white" d="M6.94 5a2 2 0 1 1-4-.002A2 2 0 0 1 6.94 5zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68z"/>
+                </svg>
+                miguelramoncruz
+              </a>
+            </li>
           </ul>
         </section>
 
         <section>
           <h2>Education</h2>
           <div class="entry">
-            <div class="entry-title">B.S. Computer Science</div>
-            <div class="entry-date">2015 — 2019</div>
-            <div class="entry-sub">University of Texas at Austin</div>
+            <div class="entry-title">Mechatronic Systems Engineering</div>
+            <div class="entry-degree">Bachelor of Applied Science</div>
+            <div class="entry-date">2012 — 2016</div>
+            <div class="entry-sub"><span class="entry-company">Simon Fraser University</span></div>
           </div>
         </section>
 
         <section>
           <h2>Skills</h2>
           <div class="skill-group">
-            <span class="skill-label">Languages</span>
-            <span>TypeScript, Python, Go, SQL</span>
+            <span class="skill-label">Programming Languages</span>
+            <ul class="skill-list">
+              <li>C/C++</li>
+              <li>Python</li>
+              <li>C#</li>
+              <li>JS</li>
+            </ul>
           </div>
           <div class="skill-group">
-            <span class="skill-label">Frameworks</span>
-            <span>React, Node.js, Next.js, FastAPI</span>
+            <span class="skill-label">RTOS & Frameworks</span>
+            <ul class="skill-list">
+              <li>Zephyr</li>
+              <li>FreeRTOS</li>
+              <li>UEFI</li>
+              <li>Robot Framework</li>
+            </ul>
           </div>
           <div class="skill-group">
             <span class="skill-label">Infrastructure</span>
-            <span>Docker, Kubernetes, AWS, Terraform</span>
+            <ul class="skill-list">
+              <li>Azure DevOps</li>
+              <li>CMake</li>
+            </ul>
           </div>
           <div class="skill-group">
-            <span class="skill-label">Tools</span>
-            <span>Git, PostgreSQL, Redis, GitHub Actions</span>
+            <span class="skill-label">Hardware Protocols</span>
+            <ul class="skill-list">
+              <li>UART</li>
+              <li>I2C</li>
+              <li>SPI</li>
+              <li>MIPI DSI2 (C-PHY/D-PHY)</li>
+            </ul>
           </div>
         </section>
 
@@ -67,9 +98,10 @@
         <section>
           <h2>Professional Summary</h2>
           <p>
-            Results-driven software engineer with 5+ years of experience building scalable
-            web applications. Passionate about clean code, developer tooling, and shipping
-            products that users love.
+            Results-driven embedded systems engineer with 7+ years of experience in consumer electronics, wearables, and IoT devices. 
+            Expertise in silicon bringup, including the development of production-grade Zephyr RTOS drivers based on bare-metal verification suites for complex display subsystems (MIPI DSI C/D-PHY).
+            Strong expertise in bootloader implementation, firmware update mechanisms, and non-volatile storage solutions in both Zephyr RTOS and UEFI. 
+            Specialized in both low-level firmware development and automated testing, having developed CI/CD pipelines and test frameworks that drive reliability and performance in embedded systems.
           </p>
         </section>
 
@@ -78,39 +110,82 @@
 
           <div class="entry">
             <div class="entry-header">
+              <span class="entry-title">Firmware Engineer</span>
+              <span class="entry-date">Oct. 2025 — Present</span>
+            </div>
+            <div class="entry-sub"><span class="entry-company">Meta (Triple Crown Consulting)</span><span class="entry-location">Redmond, WA, USA</span></div>
+            <ul>
+              <li>Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem by porting bare-metal verification tests into production Zephyr RTOS drivers for C/D-PHY initialization, power, clock, and reset control,
+                  achieving first output on the display.
+              </li>
+              <li>Debugged and resolved critical silicon bringup issues, including bus faults from power domain sequencing violations and read-modify-write hazards on certain registers, resulting in reduced
+                  debug cycles through the implementation of defensive initialization patterns.
+              </li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <div class="entry-header">
               <span class="entry-title">Senior Software Engineer</span>
-              <span class="entry-date">Jan 2022 — Present</span>
+              <span class="entry-date">Jun. 2025 — Oct. 2025</span>
             </div>
-            <div class="entry-sub">Acme Corp · San Francisco, CA</div>
+            <div class="entry-sub"><span class="entry-company">Microsoft (via HCLTech)</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Led a team of 4 engineers to redesign the core API, reducing average response time by 40%.</li>
-              <li>Architected a microservices migration from a monolithic Rails app, enabling independent deployments.</li>
-              <li>Introduced end-to-end testing with Playwright, cutting production bug reports by 30%.</li>
+              <li>Integrated Qualcomm Board Support Packages (BSPs) for audio subsystems on Microsoft Surface devices, enabling seamless driver bring-up,
+                DSP tuning, and endpoint path validation across firmware layers.
+              </li>
             </ul>
           </div>
 
           <div class="entry">
             <div class="entry-header">
-              <span class="entry-title">Software Engineer</span>
-              <span class="entry-date">Jun 2019 — Dec 2021</span>
+              <span class="entry-title">Firmware Engineer</span>
+              <span class="entry-date">Sep. 2023 — Mar. 2025</span>
             </div>
-            <div class="entry-sub">Startup Inc · Remote</div>
+            <div class="entry-sub"><span class="entry-company">Meta (via Fresh Consulting)</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Built real-time collaboration features using WebSockets, serving 10k+ concurrent users.</li>
-              <li>Developed a CI/CD pipeline with GitHub Actions and Docker, cutting deployment time by 50%.</li>
-              <li>Mentored two junior engineers through weekly code reviews and pair programming sessions.</li>
+              <li>Implemented a bootloader with DFU for an ARM Cortex-M33 microcontroller (MCU) for a wearable
+                  device in Zephyr RTOS. Optimized company build systems, enabling the bootloader to be leveraged
+                  by other projects, reducing development time and streamlining workflows of internal stakeholders.
+              </li>
+              <li>Designed and implemented a custom non-volatile storage (NVS) solution for an STM32 Cortex-M7
+                  MCU with Zephyr RTOS for persistent data storage. This implementation enabled automated firmware
+                  flashing for factory provisioning, reducing production time and streamlining device configuration.
+              </li>
+              <li>Developed and deployed continuous integration (CI) pipelines and automated tests for an embedded
+                  system. The unit testing (with hardware interface mocking for I2C/SPI) and system-level testing (Robot
+                  Framework) ensured regressions in firmware builds were caught and design goals were met.
+              </li>
             </ul>
           </div>
 
           <div class="entry">
             <div class="entry-header">
-              <span class="entry-title">Software Engineering Intern</span>
-              <span class="entry-date">May 2018 — Aug 2018</span>
+              <span class="entry-title">Software/Firmware Engineer</span>
+              <span class="entry-date">Feb. 2020 — Dec. 2022</span>
             </div>
-            <div class="entry-sub">Tech Solutions LLC · Austin, TX</div>
+            <div class="entry-sub"><span class="entry-company">Microsoft</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Delivered a customer-facing dashboard feature in React that became part of the core product.</li>
-              <li>Wrote unit tests that increased overall code coverage from 62% to 80%.</li>
+              <li>Developed a Trusted Platform Module (TPM) firmware update driver in C for Microsoft Surface devices,
+                  allowing the TPM firmware to be updated by users from the OS to ensure device compliance.
+              </li>
+              <li>Modernized and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple
+                  Surface device generations, ensuring cross-SoC compatibility and secure, seamless update delivery.
+              </li>
+            </ul>
+          </div>
+          
+          <div class="entry">
+            <div class="entry-header">
+              <span class="entry-title">Software Development Engineer</span>
+              <span class="entry-date">Apr. 2018 — Oct. 2019</span>
+            </div>
+            <div class="entry-sub"><span class="entry-company">Microsoft (via Protingent Inc.)</span><span class="entry-location">Redmond, WA, USA</span></div>
+            <ul>
+              <li>Led the UEFI test team of 3 engineers responsible for the automated testing infrastructure for
+                  Microsoft Surface devices in a lab for continuous integration using Python and PowerShell integrated
+                  with Azure DevOps, reducing the time required to identify and fix bugs and prevent regressions.
+              </li>
             </ul>
           </div>
         </section>
@@ -121,7 +196,7 @@
 
     <footer class="page-footer">
       <span>MIGUEL CRUZ</span>
-      <span>linkedin.com/in/johndoe</span>
+      <span>linkedin.com/in/miguelramoncruz</span>
     </footer>
 
   </div><!-- /.page -->
