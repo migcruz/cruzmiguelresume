@@ -16,4 +16,4 @@ WORKDIR /app
 COPY src/index.html src/style.css ./
 COPY src/fonts/ ./fonts/
 
-CMD ["sh", "-c", "mkdir -p /build && weasyprint index.html /build/MiguelCruz_Resume.pdf && echo 'PDF written to /build/MiguelCruz_Resume.pdf'"]
+CMD ["sh", "-c", "mkdir -p /build && weasyprint --uncompressed-pdf index.html /build/MiguelCruz_Resume.pdf && echo 'PDF written to /build/MiguelCruz_Resume.pdf'"]
