@@ -16,8 +16,9 @@ There is no build step for the HTML — it is the source, not a generated artifa
 
 | File | Purpose |
 |---|---|
-| `index.html` | Resume content and structure |
-| `style.css` | All styling. Divided into clearly labelled section blocks |
+| `src/index.html` | Resume content and structure |
+| `src/style.css` | All styling. Divided into clearly labelled section blocks |
+| `src/fonts/` | Self-hosted TTF files (geist-sans/, cormorant-garamond/) |
 | `Dockerfile` | `python:3.12-slim` + WeasyPrint system deps + pip install |
 | `docker-compose.yml` | Builds image, mounts `./build` volume, runs WeasyPrint, exits |
 | `.gitignore` | Ignores `build/` directory |
@@ -98,7 +99,7 @@ fonts/
     CormorantGaramond-Regular.ttf  (weight 400, normal)
 ```
 
-The Dockerfile has `COPY fonts/ ./fonts/` to bundle them into the image. **If you add a new font weight or style, you must add both the TTF file and a matching `@font-face` block in `style.css`, then rebuild the Docker image.**
+The Dockerfile has `COPY src/fonts/ ./fonts/` to bundle them into the image. **If you add a new font weight or style, you must add both the TTF file and a matching `@font-face` block in `style.css`, then rebuild the Docker image.**
 
 WeasyPrint does NOT synthesize italic if no italic `@font-face` is declared — unlike browsers which oblique-skew the regular variant. Always declare an explicit italic face when `font-style: italic` is used on any element.
 

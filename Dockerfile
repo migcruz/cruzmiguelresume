@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --no-cache-dir weasyprint
 
 WORKDIR /app
-COPY index.html style.css ./
-COPY fonts/ ./fonts/
+COPY src/index.html src/style.css ./
+COPY src/fonts/ ./fonts/
 
-CMD ["sh", "-c", "mkdir -p /build && weasyprint index.html /build/resume.pdf && echo 'PDF written to /build/resume.pdf'"]
+CMD ["sh", "-c", "mkdir -p /build && weasyprint index.html /build/MiguelCruz_Resume.pdf && echo 'PDF written to /build/MiguelCruz_Resume.pdf'"]
