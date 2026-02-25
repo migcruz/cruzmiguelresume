@@ -43,6 +43,8 @@ body {
   line-height: 1.60;
   color: #283135;
   background: #f0f0f0;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 }
 
 /* ── Page shell ─────────────────────────────────────────── */
@@ -322,7 +324,11 @@ section h2 {
 
 /* ── Print styles ───────────────────────────────────────── */
 @media print {
-  body { background: #fff; }
+  body {
+    background: #fff;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 
   .page {
     margin: 0;

@@ -49,6 +49,11 @@ Every font size is in explicit `px`. This was an intentional decision after disc
 - **Entry titles / skill labels:** `font-weight: 500`
 - Bold exceptions (still 700): none currently
 
+### Typography quality
+Set on `body` for both screen and print:
+- **`text-rendering: optimizeLegibility`** — enables kerning and common ligatures at the font rendering level
+- **`font-feature-settings: "kern" 1, "liga" 1, "calt" 1`** — explicitly enables OpenType kerning, standard ligatures, and contextual alternates. Works with the TTF files as-is — no OTF files required. Both `.ttf` and `.otf` are OpenType containers and support the same feature tags.
+
 ### Section heading sizes are scoped with `:has()`
 The `h2` font sizes per section use CSS `:has()` selectors:
 ```css
@@ -83,6 +88,8 @@ The `@media print` block has rules critical for correct PDF output. Key decision
 - **`@page { margin: 18mm 10mm 10mm }`** — 3-value shorthand: top 18mm, sides 10mm, bottom 10mm. Must match `.page { padding: 18mm 10mm 10mm }` on screen. The @page margins become the PDF margins (`.page` gets `padding: 0` in print). Mismatching these was the original cause of "extra margins" in the PDF. The top is 18mm (not 10mm) because the header uses `margin-top: -18mm` to bleed to the page edge — the bottom has no such bleed so it uses 10mm like the sides.
 - **`display: flex` must not appear inside `.page` in print** — `.page-footer` uses floats instead of flex for left/right layout. `.entry-header` still uses flex but it is nested deeper (inside `.body-columns → .main-col → section → .entry`) and does not directly trigger the WeasyPrint flex bug.
 - **`margin-top: auto` on `.page-footer` has no effect in print** — because `.page` is `display: block` in print. The footer just falls naturally after content. The @page bottom margin provides visual spacing.
+- **`print-color-adjust: exact`** — set on `body` in `@media print` (with `-webkit-print-color-adjust: exact` alias). Ensures WeasyPrint preserves all background colors and fills exactly as declared. Without this, backgrounds like the grey sidebar and header could be stripped.
+- **`--uncompressed-pdf`** — WeasyPrint CLI flag added to the Dockerfile CMD. Disables PDF stream compression for maximum fidelity. Increases file size but removes any risk of compression artifacts.
 
 ### Fonts are self-hosted
 Google Fonts links have been removed from `index.html`. Both fonts are loaded via `@font-face` in `style.css` using local TTF files copied into the Docker image.
