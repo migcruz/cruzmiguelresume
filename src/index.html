@@ -60,7 +60,6 @@
             <ul class="skill-list">
               <li>C/C++</li>
               <li>Python</li>
-              <li>JS</li>
             </ul>
           </div>
           <div class="skill-group">
@@ -69,8 +68,6 @@
               <li>Zephyr</li>
               <li>FreeRTOS</li>
               <li>UEFI</li>
-              <li>React</li>
-              <li>Django</li>
             </ul>
           </div>
           <div class="skill-group">
@@ -102,9 +99,11 @@
             </ul>
           </div>
           <div class="skill-group">
-            <span class="skill-label">Database</span>
+            <span class="skill-label">Tools</span>
             <ul class="skill-list">
-              <li>PostgreSQL</li>
+              <li>JTAG/SWD + GDB</li>
+              <li>Logic Analyzer</li>
+              <li>Oscilloscope</li>
             </ul>
           </div>
         </section>
@@ -116,10 +115,8 @@
         <section>
           <h2>Professional Summary</h2>
           <p>
-            Results-driven embedded systems engineer with 7+ years of experience in consumer electronics, wearables, and IoT devices. 
-            Expertise in silicon bring-up, including the development of production-grade Zephyr RTOS drivers based on bare-metal verification suites for complex display subsystems (MIPI DSI C/D-PHY).
-            Strong expertise in bootloader implementation, firmware update mechanisms, and non-volatile storage solutions in both Zephyr RTOS and UEFI. 
-            Specialized in both low-level firmware development and automated testing, having developed CI/CD pipelines and test frameworks that drive reliability and performance in embedded systems.
+            Embedded systems engineer with 7+ years of experience across consumer electronics, wearables, and IoT. Specializes in silicon bring-up, production-grade driver development,
+            and bootloader/firmware architecture on Zephyr RTOS and UEFI. Proven track record building CI/CD pipelines and test frameworks that raise firmware reliability and performance in embedded systems.
           </p>
         </section>
 
@@ -131,26 +128,30 @@
               <span class="entry-title">Firmware Engineer</span>
               <span class="entry-date">Oct. 2025 — Present</span>
             </div>
-            <div class="entry-sub"><span class="entry-company">Meta (via Triple Crown Consulting)</span><span class="entry-location">Redmond, WA, USA</span></div>
+            <div class="entry-sub"><span class="entry-company">Meta (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem by porting bare-metal verification tests into production Zephyr RTOS drivers for C/D-PHY initialization, power, clock, and reset control,
-                  achieving first output on the display.
+              <li>Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem on a custom multi-MCU SoC by porting bare-metal verification tests into production Zephyr RTOS drivers for C/D-PHY initialization,
+                power, clock, and reset control, achieving first display output on new silicon, a critical hardware validation gate for the program.
               </li>
-              <li>Debugged and resolved critical silicon bring-up issues, including bus faults from power domain sequencing violations and read-modify-write hazards on certain registers, resulting in reduced
-                  debug cycles through the implementation of defensive initialization patterns.
+              <li>Debugged and resolved critical silicon bring-up issues, including bus faults from power domain sequencing violations and read-modify-write hazards on certain registers; the resulting defensive
+                  initialization patterns were adopted across the team to prevent recurrence in future bring-up cycles.
+              </li>
+              <li>Designed and prototyped a memory-to-peripheral DMA triple-buffering system on Zephyr RTOS, validating the architecture as a viable path to meeting the program's display pipeline throughput requirements.
               </li>
             </ul>
           </div>
 
           <div class="entry">
             <div class="entry-header">
-              <span class="entry-title">Senior Software Engineer</span>
+              <span class="entry-title">Software Engineer</span>
               <span class="entry-date">Jun. 2025 — Oct. 2025</span>
             </div>
-            <div class="entry-sub"><span class="entry-company">Microsoft (via HCLTech)</span><span class="entry-location">Redmond, WA, USA</span></div>
+            <div class="entry-sub"><span class="entry-company">Microsoft (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Integrated Qualcomm Board Support Packages (BSPs) for audio subsystems on Microsoft Surface devices, enabling seamless driver bring-up,
-                DSP tuning, and endpoint path validation across firmware layers.
+              <li>Integrated Qualcomm BSPs for audio subsystems on Microsoft Surface devices, performing functional smoke testing and coordinating with Qualcomm and internal Microsoft teams to
+                  resolve issues spanning BSP defects and UEFI firmware layers.
+              </li>
+              <li>Authored knowledge transfer documentation and training materials to enable a smooth handoff to an offshore team, ensuring continuity of audio driver bring-up and DVE validation workflows.
               </li>
             </ul>
           </div>
@@ -160,19 +161,16 @@
               <span class="entry-title">Firmware Engineer</span>
               <span class="entry-date">Sep. 2023 — Mar. 2025</span>
             </div>
-            <div class="entry-sub"><span class="entry-company">Meta (via Fresh Consulting)</span><span class="entry-location">Redmond, WA, USA</span></div>
+            <div class="entry-sub"><span class="entry-company">Meta (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Implemented a bootloader with DFU for an ARM Cortex-M33 microcontroller (MCU) for a wearable
-                  device in Zephyr RTOS. Optimized company build systems, enabling the bootloader to be leveraged
-                  by other projects, reducing development time and streamlining workflows of internal stakeholders.
+              <li>Integrated and commonized MCUBoot across the firmware codebase by developing a shared wrapper module that encapsulates bootloader configuration and exposes a clean interface for
+                  per-project build flag injection, eliminating duplicated bootloader instances; adopted by 3 projects before handoff.
               </li>
-              <li>Designed and implemented a custom non-volatile storage (NVS) solution for an STM32 Cortex-M7
-                  MCU with Zephyr RTOS for persistent data storage. This implementation enabled automated firmware
-                  flashing for factory provisioning, reducing production time and streamlining device configuration.
+              <li>Designed and implemented an NVS-backed configuration system for a universal debug board on an STM32 Cortex-M7 with Zephyr RTOS, enabling end users to persist custom workflow
+                  configurations across power cycles while also supporting per-device serial numbers and batch-specific factory provisioning.
               </li>
-              <li>Developed and deployed continuous integration (CI) pipelines and automated tests for an embedded
-                  system. The unit testing (with hardware interface mocking for I2C/SPI) and system-level testing (Robot
-                  Framework) ensured regressions in firmware builds were caught and design goals were met.
+              <li>Developed and deployed CI/CD pipelines and a two-tier automated test suite for embedded firmware, combining unit tests with hardware-mocked I2C/SPI/NVS/GPIO interfaces on PRs
+                  and daily system-level hardware-in-the-loop tests via Robot Framework, surfacing regressions within 24 hours of check-in.
               </li>
             </ul>
           </div>
@@ -184,11 +182,11 @@
             </div>
             <div class="entry-sub"><span class="entry-company">Microsoft</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Developed a Trusted Platform Module (TPM) firmware update driver in C for Microsoft Surface devices,
-                  allowing the TPM firmware to be updated by users from the OS to ensure device compliance.
+              <li>Developed a TPM firmware update driver in C for a new chip vendor, enabling Surface devices to meet Windows 11 TPM 2.0 compliance
+                  requirements ahead of the OS rollout.
               </li>
-              <li>Modernized and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple
-                  Surface device generations, ensuring cross-SoC compatibility and secure, seamless update delivery.
+              <li>Owned and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple Surface device generations,
+                  ensuring cross-SoC compatibility and secure update delivery as hardware platforms evolved.
               </li>
             </ul>
           </div>
@@ -198,11 +196,10 @@
               <span class="entry-title">Software Development Engineer</span>
               <span class="entry-date">Apr. 2018 — Oct. 2019</span>
             </div>
-            <div class="entry-sub"><span class="entry-company">Microsoft (via Protingent Inc.)</span><span class="entry-location">Redmond, WA, USA</span></div>
+            <div class="entry-sub"><span class="entry-company">Microsoft (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Led the UEFI test team of 3 engineers responsible for the automated testing infrastructure for
-                  Microsoft Surface devices in a lab for continuous integration using Python and PowerShell integrated
-                  with Azure DevOps, reducing the time required to identify and fix bugs and prevent regressions.
+              <li>Led a team of 3 engineers to build and maintain an automated UEFI test lab for Microsoft Surface devices, running nightly regression gauntlets
+                  across device SKUs via Azure DevOps and surfacing build failures within 24 hours of commit.
               </li>
             </ul>
           </div>

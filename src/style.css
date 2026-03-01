@@ -218,7 +218,7 @@ section h2 {
 .main-col section:first-child h2 { font-size: 14px; }
 
 .main-col section:first-child p {
-  font-size: 11px;
+  font-size: 10px;
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -277,7 +277,7 @@ section h2 {
 
 .entry ul li {
   margin-bottom: 2px;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 /* ── Page footer ────────────────────────────────────────── */
