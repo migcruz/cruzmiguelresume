@@ -188,7 +188,7 @@ profiles.anon = {
   experience: profiles.real.experience.map(job => ({
     ...job,
     company: "Large Technology Company",
-    location: "USA",
+    location: "Techville, USA",
     bullets: job.anonBullets ?? job.bullets
   })),
   footer: {
