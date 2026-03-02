@@ -130,8 +130,8 @@
             </div>
             <div class="entry-sub"><span class="entry-company">Meta (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
             <ul>
-              <li>Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem on a custom multi-MCU SoC by porting bare-metal verification tests into production Zephyr RTOS drivers for C/D-PHY initialization,
-                power, clock, and reset control, achieving first display output on new silicon, a critical hardware validation gate for the program.
+              <li>Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem on a custom multi-MCU SoC by translating bare-metal validation flows into production Zephyr RTOS drivers for C/D-PHY initialization.
+                  This included explicit power-domain sequencing and clock-tree initialization ordering to achieve first display output on new silicon, a critical hardware validation gate for the program.
               </li>
               <li>Debugged and resolved critical silicon bring-up issues, including bus faults from power domain sequencing violations and read-modify-write hazards on certain registers; the resulting defensive
                   initialization patterns were adopted across the team to prevent recurrence in future bring-up cycles.
