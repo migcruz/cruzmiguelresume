@@ -1,19 +1,16 @@
-FROM python:3.12-slim
+FROM node:20-slim
 
-# WeasyPrint system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpango-1.0-0 \
-    libpangoft2-1.0-0 \
-    libcairo2 \
-    libgdk-pixbuf-xlib-2.0-0 \
-    fonts-dejavu \
+    chromium \
     fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir weasyprint
-
 WORKDIR /app
-COPY src/index.html src/style.css ./
-COPY src/fonts/ ./fonts/
+COPY src/ ./src/
+COPY generate.js .
 
-CMD ["sh", "-c", "mkdir -p /build && weasyprint --uncompressed-pdf index.html /build/MiguelCruz_Resume.pdf && echo 'PDF written to /build/MiguelCruz_Resume.pdf'"]
+RUN npm init -y && npm install puppeteer-core
+
+ENV CHROMIUM_PATH=/usr/bin/chromium
+
+CMD ["node", "generate.js", "real"]

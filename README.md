@@ -1,6 +1,10 @@
 # HTML Resume
 
-A print-ready HTML/CSS resume that uses [WeasyPrint](https://weasyprint.org/) inside Docker to generate a PDF. Running the container outputs `resume.pdf` into a local `build/` folder.
+A print-ready HTML/CSS resume. All content lives in `src/content.js` — edit bullet points, jobs, and contact info there, never in the HTML. Chrome headless (via Puppeteer) generates the PDFs so the browser live preview and the PDF output use the exact same rendering engine.
+
+Two PDF variants are produced:
+- **`MiguelCruz_Resume.pdf`** — full personal details
+- **`JohnDoe_Resume.pdf`** — anonymized version with company names, location, and identifying info scrubbed
 
 ## Prerequisites
 
@@ -44,62 +48,83 @@ sudo usermod -aG docker $USER && newgrp docker
 
 ### Live preview (while editing)
 
-Install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VSCode. Then right-click `src/index.html` and choose **Open with Live Server**. The browser will auto-reload on every save.
+Install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VSCode. Then right-click `src/index.html` and choose **Open with Live Server**.
 
-### Generate PDF
+- `src/index.html` — real profile (default)
+- `src/index.html?profile=anon` — anonymized profile
+
+The browser will auto-reload on every save.
+
+### Generate PDFs
 
 ```bash
 docker compose up --build
 ```
 
-The PDF will be written to `./build/resume.pdf`. The `build/` folder is created automatically if it does not exist.
+Both PDFs will be written to `./build/`. The `build/` folder is created automatically if it does not exist.
 
 ## How it works
 
-The container runs WeasyPrint against `index.html`, mounts the host `./build` directory, and exits after writing the PDF. No browser visit required.
+All resume data is defined in `src/content.js` as a `profiles` object. `profiles.real` holds the full content. `profiles.anon` spreads over `real` and overrides only personal fields — company names, contact info, location, and education details. Bullet points that mention identifying names have a separate `anonBullets` field on that entry.
+
+`src/index.html` is a thin shell with empty containers. An inline script reads the `?profile=` URL param and calls `populate()` to fill in the page at load time. This means the live browser preview and the PDF share the same JS rendering path.
+
+`generate.js` launches Chromium via Puppeteer, loads the page as a `file://` URL, and calls `page.pdf()` with zero page margins — all spacing is handled by the CSS `.page` padding so the full-bleed header renders correctly.
 
 ```mermaid
 flowchart TD
-    src["src/index.html · src/style.css"]
+    content["src/content.js (all resume data)"]
+    html["src/index.html (thin shell)"]
     fonts["src/fonts/ (self-hosted TTFs)"]
 
     subgraph preview["Live Preview (editing)"]
         LS["Live Server"]
-        BR["Browser"]
-        src --> LS --> BR
+        BR["Browser ?profile=real or ?profile=anon"]
+        html --> LS --> BR
+        content -->|loaded as script| BR
         fonts -->|loaded locally| BR
     end
 
     subgraph docker["PDF Generation (Docker)"]
         DC["docker compose up --build"]
-        IMG["python:3.12-slim + WeasyPrint"]
-        WP["WeasyPrint"]
-        VOL[("build/MiguelCruz_Resume.pdf")]
-        src --> DC --> IMG --> WP --> VOL
+        IMG["node:20-slim + Chromium + Puppeteer"]
+        GEN["generate.js real → MiguelCruz_Resume.pdf generate.js anon  → JohnDoe_Resume.pdf"]
+        VOL[("build/")]
+        DC --> IMG --> GEN --> VOL
+        content --> IMG
+        html --> IMG
         fonts --> IMG
     end
 ```
 
-## TODO
+## Editing content
 
-- [ ] **Separate content from markup** — Move all resume data (jobs, skills, contact info) into a `resume.json` or `resume.yaml` file and use a Jinja2 template to render the HTML. Users edit only the data file, never the HTML directly.
-- [x] **CI/CD with GitHub Actions** — On every push to `main`, run the Docker container and attach the generated `resume.pdf` as a release artifact so the latest PDF is always available without running anything locally.
-- [ ] **Tailored resume variants** — Once content is in a data file, support multiple variants (e.g. `resume-embedded.yaml`, `resume-fullstack.yaml`) for targeting different roles. One `docker compose up` generates all of them.
-- [ ] **PDF hot-reload watcher** — Add a `watch` service to `docker-compose.yml` that monitors `index.html` and `style.css` for changes and re-runs WeasyPrint automatically.
-- [x] **Self-hosted fonts** — Geist Sans and Cormorant Garamond TTF files are bundled in `src/fonts/` and loaded via `@font-face`. No internet dependency at runtime — PDF output matches the browser preview.
-- [ ] **Content validation** — Add a pre-build step that validates the data file against a schema (required fields present, dates formatted correctly, bullet points under a character limit).
+Open `src/content.js`. All jobs, bullets, skills, contact info, and education are defined there.
+
+To scrub a field in the anon version, add it to the `profiles.anon` override at the bottom of the file. Bullet points that reference identifying names get an `anonBullets` array on the entry — the anon profile picks those up automatically and falls back to `bullets` for entries that don't need changes.
 
 ## Project Structure
 
 ```
 .
 ├── src/
-│   ├── index.html              # Resume content
+│   ├── index.html              # Thin shell — no inline content
+│   ├── content.js              # All resume data: real + anon profiles
 │   ├── style.css               # Styles and print stylesheet
 │   └── fonts/
 │       ├── geist-sans/         # Geist Sans TTFs (300, 300i, 400, 500)
 │       └── cormorant-garamond/ # Cormorant Garamond TTFs (400)
-├── Dockerfile                  # python:3.12-slim + WeasyPrint
-├── docker-compose.yml          # Mounts ./build for PDF output
-└── build/                      # Generated — MiguelCruz_Resume.pdf appears here
+├── generate.js                 # Puppeteer PDF generation script
+├── Dockerfile                  # node:20-slim + Chromium + puppeteer-core
+├── docker-compose.yml          # Two services: resume-real and resume-anon
+└── build/                      # Generated — PDFs appear here
 ```
+
+## TODO
+
+- [x] **Separate content from markup** — All resume data lives in `src/content.js`. Edit bullet points and jobs there, never in the HTML.
+- [x] **CI/CD with GitHub Actions** — On every push to `main`, both PDFs are generated and attached as release artifacts.
+- [x] **Anonymized resume variant** — `JohnDoe_Resume.pdf` is generated automatically with company names, location, education details, and contact info scrubbed.
+- [x] **Self-hosted fonts** — Geist Sans and Cormorant Garamond TTF files are bundled in `src/fonts/` and loaded via `@font-face`. No internet dependency at runtime.
+- [ ] **PDF hot-reload watcher** — Add a `watch` service to `docker-compose.yml` that monitors source files and regenerates the PDF automatically.
+- [ ] **Content validation** — Add a pre-build step that validates the data against a schema (required fields present, dates formatted correctly, bullet points under a character limit).

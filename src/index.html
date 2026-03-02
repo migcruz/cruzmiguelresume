@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Miguel Cruz — Resume</title>
+  <title id="page-title">Resume</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="content.js"></script>
 </head>
 <body>
   <div class="page">
 
     <header>
-      <h1>Miguel Cruz</h1>
+      <h1 id="resume-name"></h1>
     </header>
 
     <div class="body-columns">
@@ -19,93 +20,17 @@
 
         <section>
           <h2>Contact</h2>
-          <ul class="contact">
-            <li>miguel.vale.cruz@gmail.com</li>
-            <li>(604) 626-9579</li>
-            <li>Bothell, WA</li>
-            <li class="contact-github">
-              <a href="https://github.com/migcruz">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="9" height="9">
-                  <path fill="currentColor" d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                </svg>
-                migcruz
-              </a>
-            </li>
-            <li class="contact-linkedin">
-              <a href="https://linkedin.com/in/miguelramoncruz">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="9" height="9">
-                  <rect width="24" height="24" rx="4" fill="#283135"/>
-                  <path fill="white" d="M6.94 5a2 2 0 1 1-4-.002A2 2 0 0 1 6.94 5zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68z"/>
-                </svg>
-                miguelramoncruz
-              </a>
-            </li>
-          </ul>
+          <ul class="contact" id="contact-list"></ul>
         </section>
 
         <section>
           <h2>Education</h2>
-          <div class="entry">
-            <div class="entry-title">Mechatronic Systems Engineering</div>
-            <div class="entry-degree">Bachelor of Applied Science</div>
-            <div class="entry-date">2012 — 2016</div>
-            <div class="entry-sub"><span class="entry-company">Simon Fraser University</span></div>
-          </div>
+          <div id="education-container"></div>
         </section>
 
         <section>
           <h2>Skills</h2>
-          <div class="skill-group">
-            <span class="skill-label">Programming Languages</span>
-            <ul class="skill-list">
-              <li>C/C++</li>
-              <li>Python</li>
-            </ul>
-          </div>
-          <div class="skill-group">
-            <span class="skill-label">RTOS & Frameworks</span>
-            <ul class="skill-list">
-              <li>Zephyr</li>
-              <li>FreeRTOS</li>
-              <li>UEFI</li>
-            </ul>
-          </div>
-          <div class="skill-group">
-            <span class="skill-label">Infrastructure</span>
-            <ul class="skill-list">
-              <li>Docker</li>
-              <li>Azure DevOps</li>
-              <li>CMake</li>
-              <li>Robot Framework</li>
-            </ul>
-          </div>
-          <div class="skill-group">
-            <span class="skill-label">Protocols</span>
-            <ul class="skill-list">
-              <li>UART</li>
-              <li>I2C</li>
-              <li>SPI</li>
-              <li>CAN</li>
-              <li>DSI2/CSI2 (C-PHY/D-PHY)</li>
-              <li>Bluetooth</li>
-            </ul>
-          </div>
-          <div class="skill-group">
-            <span class="skill-label">Microcontrollers</span>
-            <ul class="skill-list">
-              <li>ARM Cortex-M</li>
-              <li>STM32</li>
-              <li>Nordic nRF54</li>
-            </ul>
-          </div>
-          <div class="skill-group">
-            <span class="skill-label">Tools</span>
-            <ul class="skill-list">
-              <li>JTAG/SWD + GDB</li>
-              <li>Logic Analyzer</li>
-              <li>Oscilloscope</li>
-            </ul>
-          </div>
+          <div id="skills-container"></div>
         </section>
 
       </aside>
@@ -114,110 +39,102 @@
 
         <section>
           <h2>Professional Summary</h2>
-          <p>
-            Embedded systems engineer with 7+ years of experience across consumer electronics, wearables, and IoT. Specializes in silicon bring-up, production-grade driver development,
-            and bootloader/firmware architecture on Zephyr RTOS and UEFI. Proven track record building CI/CD pipelines and test frameworks that raise firmware reliability and performance in embedded systems.
-          </p>
+          <p id="summary-text"></p>
         </section>
 
         <section>
           <h2>Professional Experience</h2>
-
-          <div class="entry">
-            <div class="entry-header">
-              <span class="entry-title">Firmware Engineer</span>
-              <span class="entry-date">Oct. 2025 — Feb. 2026</span>
-            </div>
-            <div class="entry-sub"><span class="entry-company">Meta (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
-            <ul>
-              <li>Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem on a custom multi-MCU SoC by translating bare-metal validation flows into production Zephyr RTOS drivers for C/D-PHY initialization.
-                  This included explicit power-domain sequencing and clock-tree initialization ordering to achieve first display output on new silicon, a critical hardware validation gate for the program.
-              </li>
-              <li>Debugged and resolved critical silicon bring-up issues, including bus faults from power domain sequencing violations and read-modify-write hazards on certain registers; the resulting defensive
-                  initialization patterns were adopted across the team to prevent recurrence in future bring-up cycles.
-              </li>
-              <li>Designed and prototyped a memory-to-peripheral DMA triple-buffering system on Zephyr RTOS, validating the architecture as a viable path to meeting the program's display pipeline throughput requirements.
-              </li>
-            </ul>
-          </div>
-
-          <div class="entry">
-            <div class="entry-header">
-              <span class="entry-title">Software Engineer</span>
-              <span class="entry-date">Jun. 2025 — Oct. 2025</span>
-            </div>
-            <div class="entry-sub"><span class="entry-company">Microsoft (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
-            <ul>
-              <li>Integrated Qualcomm BSPs for audio subsystems on Microsoft Surface devices, performing functional smoke testing and coordinating with Qualcomm and internal Microsoft teams to
-                  resolve issues spanning BSP defects, UEFI firmware layers, and OS-level driver behavior across different Windows builds.
-              </li>
-              <li>Authored knowledge transfer documentation and training materials to enable a smooth handoff to an offshore team, ensuring continuity of audio driver bring-up and DVE validation workflows.
-              </li>
-            </ul>
-          </div>
-
-          <div class="entry">
-            <div class="entry-header">
-              <span class="entry-title">Firmware Engineer</span>
-              <span class="entry-date">Sep. 2023 — Mar. 2025</span>
-            </div>
-            <div class="entry-sub"><span class="entry-company">Meta (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
-            <ul>
-              <li>Integrated and commonized MCUBoot across the firmware codebase by developing a shared wrapper module that encapsulates bootloader configuration and exposes a clean interface for
-                  per-project build flag injection, eliminating duplicated bootloader instances; adopted by 3 projects before handoff.
-              </li>
-              <li>Designed and implemented an NVS-backed configuration system for a universal debug board on an STM32 Cortex-M7 with Zephyr RTOS, enabling end users to persist custom workflow
-                  configurations across power cycles while also supporting per-device serial numbers and batch-specific factory provisioning.
-              </li>
-              <li>Developed and deployed CI/CD pipelines and a two-tier automated test suite for embedded firmware, combining unit tests with hardware-mocked I2C/SPI/NVS/GPIO interfaces on PRs
-                  and daily system-level hardware-in-the-loop tests via Robot Framework, surfacing regressions within 24 hours of check-in.
-              </li>
-            </ul>
-          </div>
-
-          <div class="entry">
-            <div class="entry-header">
-              <span class="entry-title">Software/Firmware Engineer</span>
-              <span class="entry-date">Feb. 2020 — Dec. 2022</span>
-            </div>
-            <div class="entry-sub"><span class="entry-company">Microsoft</span><span class="entry-location">Redmond, WA, USA</span></div>
-            <ul>
-              <li>Developed a TPM firmware update driver in C for a new chip vendor, enabling Surface devices to meet Windows 11 TPM 2.0 compliance
-                  requirements ahead of the OS rollout.
-              </li>
-              <li>Owned and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple Surface device generations,
-                  ensuring cross-SoC compatibility and secure update delivery as hardware platforms evolved.
-              </li>
-            </ul>
-          </div>
-          
-          <div class="entry">
-            <div class="entry-header">
-              <span class="entry-title">Software Development Engineer</span>
-              <span class="entry-date">Apr. 2018 — Oct. 2019</span>
-            </div>
-            <div class="entry-sub"><span class="entry-company">Microsoft (contract)</span><span class="entry-location">Redmond, WA, USA</span></div>
-            <ul>
-              <li>Led a team of 3 engineers to build and maintain an automated UEFI test lab for Microsoft Surface devices, running nightly regression gauntlets
-                  across device SKUs via Azure DevOps and surfacing build failures within 24 hours of commit.
-              </li>
-            </ul>
-          </div>
+          <div id="experience-container"></div>
         </section>
 
       </main>
 
     </div><!-- /.body-columns -->
 
-    <footer class="page-footer">
-      <span>MIGUEL CRUZ</span>
-      <span><a href="https://linkedin.com/in/miguelramoncruz">LINKEDIN.COM/IN/MIGUELRAMONCRUZ</a></span>
-    </footer>
+    <footer class="page-footer" id="resume-footer"></footer>
 
   </div><!-- /.page -->
 
   <div class="print-button no-print">
     <button onclick="window.print()">Save as PDF</button>
   </div>
+
+  <script>
+    const GITHUB_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="9" height="9"><path fill="currentColor" d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>`;
+
+    const LINKEDIN_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="9" height="9"><rect width="24" height="24" rx="4" fill="#283135"/><path fill="white" d="M6.94 5a2 2 0 1 1-4-.002A2 2 0 0 1 6.94 5zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68z"/></svg>`;
+
+    function populate(p) {
+      document.title = p.meta.title;
+      document.getElementById('page-title').textContent = p.meta.title;
+      document.getElementById('resume-name').textContent = p.name;
+      document.getElementById('summary-text').textContent = p.summary;
+
+      // Contact
+      const cl = document.getElementById('contact-list');
+      cl.innerHTML = `
+        <li>${p.contact.email}</li>
+        <li>${p.contact.phone}</li>
+        <li>${p.contact.location}</li>
+        <li class="contact-github">
+          <a href="${p.contact.github.url}">${GITHUB_ICON} ${p.contact.github.handle}</a>
+        </li>
+        <li class="contact-linkedin">
+          <a href="${p.contact.linkedin.url}">${LINKEDIN_ICON} ${p.contact.linkedin.handle}</a>
+        </li>
+      `;
+
+      // Education
+      document.getElementById('education-container').innerHTML = p.education.map(e => `
+        <div class="entry">
+          <div class="entry-title">${e.degree}</div>
+          <div class="entry-degree">${e.credential}</div>
+          <div class="entry-date">${e.dates}</div>
+          <div class="entry-sub"><span class="entry-company">${e.institution}</span></div>
+        </div>
+      `).join('');
+
+      // Skills
+      document.getElementById('skills-container').innerHTML = p.skills.map(g => `
+        <div class="skill-group">
+          <span class="skill-label">${g.label}</span>
+          <ul class="skill-list">
+            ${g.items.map(i => `<li>${i}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+
+      // Experience
+      document.getElementById('experience-container').innerHTML = p.experience.map(job => {
+        const companyLabel = job.type === 'contract'
+          ? `${job.company} (contract)`
+          : job.company;
+        return `
+          <div class="entry">
+            <div class="entry-header">
+              <span class="entry-title">${job.title}</span>
+              <span class="entry-date">${job.dates}</span>
+            </div>
+            <div class="entry-sub">
+              <span class="entry-company">${companyLabel}</span>
+              <span class="entry-location">${job.location}</span>
+            </div>
+            <ul>
+              ${job.bullets.map(b => `<li>${b}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }).join('');
+
+      // Footer
+      document.getElementById('resume-footer').innerHTML = `
+        <span>${p.footer.name}</span>
+        <span><a href="${p.footer.linkedin.url}">${p.footer.linkedin.label}</a></span>
+      `;
+    }
+
+    const profile = new URLSearchParams(window.location.search).get('profile') || 'real';
+    populate(profiles[profile]);
+  </script>
 </body>
 </html>

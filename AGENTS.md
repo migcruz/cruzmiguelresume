@@ -6,9 +6,11 @@ Read this file before making any changes. It captures architectural decisions, g
 
 ## What this project is
 
-An HTML/CSS resume for **Miguel Cruz, Embedded Systems Engineer** that generates a PDF via WeasyPrint inside Docker. The source files are `index.html` + `style.css`. The output is `build/resume.pdf`.
+An HTML/CSS resume for **Miguel Cruz, Embedded Systems Engineer**. All content lives in `src/content.js`. `src/index.html` is a thin shell that JavaScript populates at load time. Chrome headless (Puppeteer) generates the PDFs so the browser live preview and the PDF output share the same rendering engine.
 
-There is no build step for the HTML — it is the source, not a generated artifact. Live preview is done with the VSCode Live Server extension pointed at `index.html`.
+Two PDF variants are produced:
+- **`MiguelCruz_Resume.pdf`** — full personal details (`profile=real`)
+- **`JohnDoe_Resume.pdf`** — anonymized version (`profile=anon`)
 
 ---
 
@@ -16,14 +18,60 @@ There is no build step for the HTML — it is the source, not a generated artifa
 
 | File | Purpose |
 |---|---|
-| `src/index.html` | Resume content and structure |
+| `src/content.js` | All resume data: `profiles.real` + `profiles.anon`. Edit content here, never in the HTML |
+| `src/index.html` | Thin shell — empty containers only, no inline content. Loads `content.js` and runs `populate()` |
 | `src/style.css` | All styling. Divided into clearly labelled section blocks |
 | `src/fonts/` | Self-hosted TTF files (geist-sans/, cormorant-garamond/) |
-| `Dockerfile` | `python:3.12-slim` + WeasyPrint system deps + pip install |
-| `docker-compose.yml` | Builds image, mounts `./build` volume, runs WeasyPrint, exits |
+| `generate.js` | Puppeteer script — loads `src/index.html?profile=<X>` and calls `page.pdf()` |
+| `Dockerfile` | `node:20-slim` + Chromium + puppeteer-core |
+| `docker-compose.yml` | Two services: `resume-real` and `resume-anon`, both output to `./build/` |
 | `.gitignore` | Ignores `build/` directory |
 | `README.md` | User-facing docs with usage, Mermaid diagram, and TODO list |
 | `AGENTS.md` | This file — agent handoff context |
+
+---
+
+## Content architecture
+
+### profiles object (`src/content.js`)
+
+```
+profiles.real = {
+  meta:       { title, pdfFilename }
+  name:       string
+  contact:    { email, phone, location, github: { handle, url }, linkedin: { handle, url } }
+  summary:    string
+  education:  [{ degree, credential, institution, dates }]
+  skills:     [{ label, items: [...] }]           // 6 groups
+  experience: [{ title, company, type, dates, location, bullets: [...], anonBullets?: [...] }]
+  footer:     { name, linkedin: { label, url } }
+}
+```
+
+`profiles.anon` uses object spread over `profiles.real`, overriding only:
+- `meta` (title, filename)
+- `name`
+- `contact` (all fields)
+- `education` — mapped to override `institution` and `dates`
+- `experience` — mapped to override `company` and `location`; uses `anonBullets` when present
+- `footer`
+
+### anonBullets pattern
+
+If a job entry's bullet text contains identifying company/product names, add an `anonBullets` array alongside `bullets` on that entry. The anon profile map picks up `anonBullets` if present and falls back to `bullets` otherwise:
+
+```js
+bullets: job.anonBullets || job.bullets
+```
+
+Entries that don't need scrubbing require no change.
+
+### Profile switching
+
+`src/index.html` reads `?profile=` from the URL and calls `populate(profiles[profile])`. Default is `real`.
+
+- Live preview real: open `src/index.html`
+- Live preview anon: open `src/index.html?profile=anon`
 
 ---
 
@@ -40,36 +88,34 @@ Two-column grid: `20% sidebar | 1fr main`.
 ## CSS architecture — critical details
 
 ### Font sizing: all `px`, no `rem`
-Every font size is in explicit `px`. This was an intentional decision after discovering that changing `html { font-size }` caused all `rem`-based sizes to scale unexpectedly. Each section has its own clearly labelled block in `style.css` with independent font sizes you can tune without affecting others.
+Every font size is in explicit `px`. Each section has its own clearly labelled block in `style.css` with independent font sizes you can tune without affecting others.
 
 ### Font weights
 - **Body (Geist Sans):** `font-weight: 300` (Light) set on `body`, cascades to all body text
 - **Name (Cormorant Garamond):** `font-weight: 400` (Regular)
 - **Section h2 labels:** `font-weight: 500`
 - **Entry titles / skill labels:** `font-weight: 500`
-- Bold exceptions (still 700): none currently
 
 ### Typography quality
 Set on `body` for both screen and print:
 - **`text-rendering: optimizeLegibility`** — enables kerning and common ligatures at the font rendering level
-- **`font-feature-settings: "kern" 1, "liga" 1, "calt" 1`** — explicitly enables OpenType kerning, standard ligatures, and contextual alternates. Works with the TTF files as-is — no OTF files required. Both `.ttf` and `.otf` are OpenType containers and support the same feature tags.
+- **`font-feature-settings: "kern" 1, "liga" 1, "calt" 1`** — explicitly enables OpenType kerning, standard ligatures, and contextual alternates
 
 ### Section heading sizes are scoped with `:has()`
-The `h2` font sizes per section use CSS `:has()` selectors:
 ```css
-.sidebar section:has(.contact) h2 { font-size: 14px; }
-.sidebar section:has(.entry) h2   { font-size: 14px; }
+.sidebar section:has(.contact) h2    { font-size: 14px; }
+.sidebar section:has(.entry) h2      { font-size: 14px; }
 .sidebar section:has(.skill-group) h2 { font-size: 14px; }
-.main-col section:first-child h2  { font-size: 14px; } /* Summary */
-.main-col section:last-child h2   { font-size: 14px; } /* Experience */
+.main-col section:first-child h2     { font-size: 14px; } /* Summary */
+.main-col section:last-child h2      { font-size: 14px; } /* Experience */
 ```
-**Caveat:** WeasyPrint may not support `:has()`. This only affects PDF output — Live Server preview (Chrome) renders it fine. If PDF section headings look wrong, replace `:has()` selectors with explicit classes on each `<section>`.
+Chrome fully supports `:has()` — no caveat for PDF output.
 
 ### Page is fixed A4
-`.page` uses `width: 210mm; min-height: 297mm` with `padding: 18mm 10mm` (10mm side margins — safe modern printer margin). This is intentional — the page should always look like A4 regardless of font size changes.
+`.page` uses `width: 210mm; min-height: 297mm` with `padding: 18mm 10mm 10mm`. This is intentional — the page should always look like A4 regardless of font size changes.
 
 ### Header is fixed height
-The header uses `height: 30mm` with `text-align: center; line-height: 30mm` to center the name — **not flexbox**. Flex was intentionally removed after discovering WeasyPrint crashes on nested flex containers (`.page` is already flex, so `header` having `display: flex` triggered a layout bug). `line-height: 30mm` vertically centers single-line text within the fixed-height box. Changing `font-size` on `header h1` does **not** affect the header height or push content down.
+The header uses `height: 30mm` with `text-align: center; line-height: 30mm` to center the name — **not flexbox**. `line-height: 30mm` vertically centers single-line text within the fixed-height box. Changing `font-size` on `header h1` does **not** affect the header height or push content down.
 
 The grey background bleeds to the page top edge via the negative margin trick:
 ```css
@@ -81,22 +127,21 @@ header {
 }
 ```
 
-### Print / WeasyPrint CSS architecture
-The `@media print` block has rules critical for correct PDF output. Key decisions:
+### Print / Chrome CSS architecture
 
-- **`.page { display: block }`** — overrides the screen `display: flex`. Without this, WeasyPrint interprets `flex: 1` on `.body-columns` as "fill the entire page height," stretching the grid across 3+ pages.
-- **`@page { margin: 18mm 10mm 10mm }`** — 3-value shorthand: top 18mm, sides 10mm, bottom 10mm. Must match `.page { padding: 18mm 10mm 10mm }` on screen. The @page margins become the PDF margins (`.page` gets `padding: 0` in print). Mismatching these was the original cause of "extra margins" in the PDF. The top is 18mm (not 10mm) because the header uses `margin-top: -18mm` to bleed to the page edge — the bottom has no such bleed so it uses 10mm like the sides.
-- **`display: flex` must not appear inside `.page` in print** — `.page-footer` uses floats instead of flex for left/right layout. `.entry-header` still uses flex but it is nested deeper (inside `.body-columns → .main-col → section → .entry`) and does not directly trigger the WeasyPrint flex bug.
-- **`margin-top: auto` on `.page-footer` has no effect in print** — because `.page` is `display: block` in print. The footer just falls naturally after content. The @page bottom margin provides visual spacing.
-- **`print-color-adjust: exact`** — set on `body` in `@media print` (with `-webkit-print-color-adjust: exact` alias). Ensures WeasyPrint preserves all background colors and fills exactly as declared. Without this, backgrounds like the grey sidebar and header could be stripped.
-- **`--uncompressed-pdf`** — WeasyPrint CLI flag added to the Dockerfile CMD. Disables PDF stream compression for maximum fidelity. Increases file size but removes any risk of compression artifacts.
+The `@media print` block has rules critical for correct PDF output:
+
+- **`@page { margin: 0 }`** — Chrome clips all content to the `@page` margin boundary. Setting margins here would cause the header's negative-margin bleed to be clipped at the top edge, cutting off the header. By zeroing `@page` margins, the full physical page is the content area and the negative-margin header bleed works correctly.
+- **`.page { padding: 18mm 10mm 10mm }` kept in print** — all page spacing is handled here, not by `@page`. This is the opposite of the old WeasyPrint setup (which zeroed `.page` padding and relied on `@page` margins).
+- **`generate.js margin: { top: 0, bottom: 0, left: 0, right: 0 }`** — Puppeteer's `page.pdf()` margin parameter is independent of the CSS `@page` rule. Both must be zero to avoid double margins.
+- **`.page { display: block }`** — overrides screen `display: flex` so the grid doesn't try to stretch to fill the page in print.
+- **`print-color-adjust: exact`** — ensures Chrome preserves background colors (grey sidebar, grey header). Without this, browser print settings might strip backgrounds.
 
 ### Fonts are self-hosted
-Google Fonts links have been removed from `index.html`. Both fonts are loaded via `@font-face` in `style.css` using local TTF files copied into the Docker image.
+Both fonts are loaded via `@font-face` in `style.css` using local TTF files. The Dockerfile copies the entire `src/` directory which includes `fonts/`.
 
-Font files live in:
 ```
-fonts/
+src/fonts/
   geist-sans/
     Geist-Light.ttf        (weight 300, normal)
     Geist-LightItalic.ttf  (weight 300, italic — needed for .entry-company)
@@ -106,9 +151,9 @@ fonts/
     CormorantGaramond-Regular.ttf  (weight 400, normal)
 ```
 
-The Dockerfile has `COPY src/fonts/ ./fonts/` to bundle them into the image. **If you add a new font weight or style, you must add both the TTF file and a matching `@font-face` block in `style.css`, then rebuild the Docker image.**
+**If you add a new font weight or style, add both the TTF file and a matching `@font-face` block in `style.css`, then rebuild the Docker image.**
 
-WeasyPrint does NOT synthesize italic if no italic `@font-face` is declared — unlike browsers which oblique-skew the regular variant. Always declare an explicit italic face when `font-style: italic` is used on any element.
+Chrome synthesizes italic by oblique-skewing the regular variant if no italic face is declared, but it is still better to declare an explicit italic `@font-face` for fidelity.
 
 ---
 
@@ -119,41 +164,40 @@ WeasyPrint does NOT synthesize italic if no italic `@font-face` is declared — 
 | Name font | Cormorant Garamond 400 | Serif, centered, uppercase, `letter-spacing: 0.2em` |
 | Body font | Geist Sans 300 | Light weight — deliberately thin for a clean look |
 | Section h2 | Geist Sans 500 | Slightly heavier than body for contrast without being bold |
-| Header | Fixed `30mm` height, `line-height` centered | No flex — avoids WeasyPrint nested flex crash |
+| Header | Fixed `30mm` height, `line-height` centered | No flex |
 | Page size | A4 fixed (`210mm × 297mm`) | Not responsive — intentional |
 | Body text size | `11–12px` range | Explicit per section, not inherited |
-| Side margins | `10mm` | Safe margin for modern printers |
-| Page footer | `5mm` strip, floated spans | Name left (float left), LinkedIn right (float right). `margin-top: auto` only works in browser (flex column); in PDF footer falls naturally after content |
-| Skills layout | `<ul class="skill-list">` per group | Each skill is its own `<li>`, one per line. `.skill-label` is a `<span>` above the list |
-| Contact icons | Inline SVG + `<a>` hyperlink | LinkedIn and GitHub have path-based SVG icons. Links are preserved as PDF annotations by WeasyPrint |
-| Text color | `#283135` | CMYK 69, 62, 59, 49 converted to hex. Used on `body`, `section h2`, contact list |
+| Side margins | `10mm` (via `.page` padding) | Safe margin for modern printers |
+| Page footer | `5mm` strip, floated spans | Name left (float left), LinkedIn right (float right) |
+| Skills layout | `<ul class="skill-list">` per group | Each skill is its own `<li>`. `.skill-label` is a `<span>` above the list |
+| Contact icons | Inline SVG string constants in `index.html` script block | `GITHUB_ICON` and `LINKEDIN_ICON` — injected into contact list HTML via template literals |
+| Text color | `#283135` | CMYK 69, 62, 59, 49 converted to hex |
 | Grey backgrounds | `#f5f7f7` | CMYK 4, 3, 3, 0 converted to hex. Used on header and sidebar |
 
-**Color note:** CSS does not support CMYK values. Always convert CMYK to hex before applying. Formula: `R = 255 × (1 − C%) × (1 − K%)`, same for G and B. `device-cmyk()` exists in CSS Color Level 4 but is not reliably supported by WeasyPrint or browsers.
+**Color note:** CSS does not support CMYK values. Always convert CMYK to hex before applying.
 
 ---
 
 ## Known gotchas
 
-1. **`:has()` in WeasyPrint** — May not render section `h2` sizes correctly in PDF. Verify after any Docker run. Workaround: add explicit classes like `class="section-contact"` to each `<section>` and scope styles to those.
-2. ~~**Google Fonts in Docker**~~ — Resolved. Fonts are now self-hosted. No internet dependency at runtime.
-3. **`min-height` on `.page`** — If content overflows A4, a second page is created. WeasyPrint handles page breaks via `page-break-inside: avoid` on `.entry` only. `section { page-break-inside: avoid }` was intentionally **removed** — it caused WeasyPrint to push the entire Professional Experience section (all 4+ entries) to page 2 as an unbreakable block, leaving a large gap on page 1.
-4. **`section:first-child` / `section:last-child`** — Summary is targeted as `:first-child` and Experience as `:last-child` inside `.main-col`. If a new section is added between them, these selectors will break and explicit classes will be needed.
-5. **`.main-col` padding-top** — Set to `2mm` to align Professional Summary with the Contact section in the sidebar (which has `padding: 2mm`). If sidebar padding changes, update `.main-col { padding-top }` to match.
-6. **WeasyPrint + nested flex = crash** — WeasyPrint crashes with `ValueError: too many values to unpack` when a flex container (`.page`) contains children that are also flex containers. Fixed by: (a) using `text-align/line-height` instead of flex in `header`, (b) using floats instead of flex in `.page-footer`, (c) adding `display: block` to `.page` in `@media print`.
-7. **Python version must be pinned to `3.12-slim`** — `python:3-slim` resolves to Python 3.14+ which has WeasyPrint incompatibilities. Always use `FROM python:3.12-slim` in the Dockerfile.
-8. **`flex: 1` on `.body-columns` causes multi-page PDF** — WeasyPrint interprets `flex: 1` literally when `.page` is a flex column, stretching the grid to fill the entire page height and causing content to fragment across 3+ pages. Fixed by adding `display: block` to `.page` in `@media print`, which deactivates flex entirely for the PDF render.
-9. **`@page` margins must match `.page` padding** — In print, `.page` gets `padding: 0`. The only effective margins become those set by `@page`. If `@page { margin }` differs from the screen `.page { padding }`, the PDF will have different margins than the browser preview. Current values: both `18mm 10mm 10mm` (top 18mm, sides 10mm, bottom 10mm).
-10. **WeasyPrint does not synthesize italic** — Unlike browsers, WeasyPrint will not oblique-skew a regular font when `font-style: italic` is used. An explicit `@font-face` with `font-style: italic` pointing to an italic TTF is required. Currently declared for Geist Sans weight 300 (`Geist-LightItalic.ttf`). If italic is needed at other weights, add the corresponding TTF + `@font-face` block.
-11. **Contact icons are inline SVG** — LinkedIn and GitHub entries use inline `<svg>` path data (no external icon library). LinkedIn icon uses `fill="#283135"` (matches resume text color, not LinkedIn blue). GitHub icon uses `fill="currentColor"` (inherits text color). Both are wrapped in `<a>` tags — WeasyPrint preserves these as clickable PDF link annotations.
+1. **Chrome clips content to the `@page` margin boundary** — negative margins cannot bleed into `@page` margin space. This is why `.page` keeps its padding in print and `@page { margin: 0 }` is used instead of the reverse. Do not change this without understanding the header bleed mechanism.
+2. **`generate.js` margin and CSS `@page` margin are independent** — Puppeteer's `margin` option and the CSS `@page` rule both contribute to page margins. Currently both are zero. If either is changed without changing the other, margins will be wrong.
+3. **`waitUntil: 'networkidle0'`** — required in `generate.js` so Puppeteer waits for local font files to finish loading before capturing the PDF. Using `load` or `domcontentloaded` may capture the page before fonts are applied.
+4. **`--no-sandbox` in Puppeteer launch args** — required when Chromium runs as root inside a Docker container. Without it the container exits immediately with a permissions error.
+5. **`printBackground: true`** — required for Puppeteer to preserve background colors (grey sidebar, grey header). Chrome's default print behavior strips backgrounds. This flag overrides that.
+6. **`file://` URL in `generate.js`** — Puppeteer loads the resume as a local file URL. This works because `content.js` and fonts are on the same filesystem. No local HTTP server is needed.
+7. **`section:first-child` / `section:last-child`** — Summary is targeted as `:first-child` and Experience as `:last-child` inside `.main-col`. If a new section is added between them, these selectors will break. Add explicit classes if needed.
+8. **`.main-col` padding-top** — Set to `2mm` to align Professional Summary with the Contact section in the sidebar (which has `padding: 2mm`). If sidebar padding changes, update `.main-col { padding-top }` to match.
+9. **`min-height` on `.page`** — If content overflows A4, a second page is created. Page breaks are managed via `page-break-inside: avoid` on `.entry` only. Do not add `page-break-inside: avoid` to `section` — it forces the entire Experience section onto a single page as an unbreakable block.
+10. **Contact icons are inline SVG string constants** — defined as `GITHUB_ICON` and `LINKEDIN_ICON` at the top of the inline `<script>` in `index.html`. They are injected into the contact list via template literals in `populate()`. If you need to update an icon, change the constant there.
 
 ---
 
-## TODO (from README)
+## TODO
 
-1. **Separate content from markup** — `resume.yaml` + Jinja2 template → `index.html`. Needs a local `watch.py` watcher to keep Live Server working. Design is locked, good time to do this now.
-2. **CI/CD with GitHub Actions** — Auto-generate PDF on push to `main`, attach as release artifact.
-3. **Tailored resume variants** — Multiple YAML files for different roles, one compose run generates all.
-4. **PDF hot-reload watcher** — `docker compose watch` or `watchdog` Python lib to re-run WeasyPrint on file save.
-5. ~~**Self-hosted fonts**~~ — **Done.** Geist Sans (300, 300i, 400, 500) and Cormorant Garamond (400) are bundled as TTF files in `fonts/` and loaded via `@font-face`. Google Fonts link removed.
-6. **Content validation** — Schema check on YAML before render (depends on TODO #1).
+1. ~~**Separate content from markup**~~ — **Done.** All resume data is in `src/content.js`.
+2. ~~**CI/CD with GitHub Actions**~~ — **Done.** Both PDFs are generated and attached as release artifacts on push to `main`.
+3. ~~**Anonymized resume variant**~~ — **Done.** `JohnDoe_Resume.pdf` generated via `profile=anon`.
+4. ~~**Self-hosted fonts**~~ — **Done.** Geist Sans and Cormorant Garamond TTFs bundled in `src/fonts/`.
+5. **PDF hot-reload watcher** — Add a `watch` service to `docker-compose.yml` that monitors source files and regenerates the PDFs automatically.
+6. **Content validation** — Pre-build step to validate `content.js` data (required fields present, dates formatted correctly, bullet points under a character limit).

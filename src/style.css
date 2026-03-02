@@ -332,7 +332,7 @@ section h2 {
 
   .page {
     margin: 0;
-    padding: 0;
+    padding: 18mm 10mm 10mm;
     box-shadow: none;
     width: 100%;
     min-height: unset;
@@ -344,7 +344,7 @@ section h2 {
   .entry  { page-break-inside: avoid; }
 
   @page {
-    margin: 18mm 10mm 10mm;
+    margin: 0;
     size: A4;
   }
 }

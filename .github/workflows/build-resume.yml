@@ -17,14 +17,17 @@ jobs:
       - name: Build Docker image
         run: docker build -t resume .
 
-      - name: Generate PDF
+      - name: Generate PDFs
         run: |
           mkdir -p build
-          docker run --rm -v ${{ github.workspace }}/build:/build resume
+          docker run --rm -v ${{ github.workspace }}/build:/build resume node generate.js real
+          docker run --rm -v ${{ github.workspace }}/build:/build resume node generate.js anon
 
-      - name: Upload PDF to latest release
+      - name: Upload PDFs to latest release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
           name: Latest Resume
-          files: build/MiguelCruz_Resume.pdf
+          files: |
+            build/MiguelCruz_Resume.pdf
+            build/JohnDoe_Resume.pdf

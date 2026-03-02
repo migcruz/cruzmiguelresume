@@ -1,5 +1,12 @@
 services:
-  resume:
+  resume-real:
     build: .
     volumes:
       - ./build:/build
+    command: ["node", "generate.js", "real"]
+
+  resume-anon:
+    build: .
+    volumes:
+      - ./build:/build
+    command: ["node", "generate.js", "anon"]
