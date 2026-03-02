@@ -10,3 +10,10 @@ services:
     volumes:
       - ./build:/build
     command: ["node", "generate.js", "anon"]
+
+  tsc-watch:
+    build: .
+    volumes:
+      - ./src:/app/src
+    command: ["npx", "tsc", "--watch", "--preserveWatchOutput"]
+    profiles: ["dev"]

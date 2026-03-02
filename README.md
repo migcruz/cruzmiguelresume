@@ -1,6 +1,6 @@
 # HTML Resume
 
-A print-ready HTML/CSS resume. All content lives in `src/content.js` — edit bullet points, jobs, and contact info there, never in the HTML. Chrome headless (via Puppeteer) generates the PDFs so the browser live preview and the PDF output use the exact same rendering engine.
+A print-ready HTML/CSS resume written in TypeScript. All content lives in `src/content.ts` — edit bullet points, jobs, and contact info there, never in the HTML. Chrome headless (via Puppeteer) generates the PDFs so the browser live preview and the PDF output use the exact same rendering engine.
 
 Two PDF variants are produced:
 - **`MiguelCruz_Resume.pdf`** — full personal details
@@ -48,12 +48,20 @@ sudo usermod -aG docker $USER && newgrp docker
 
 ### Live preview (while editing)
 
-Install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VSCode. Then right-click `src/index.html` and choose **Open with Live Server**.
+Install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VSCode.
+
+Start the TypeScript watcher (runs inside Docker — no local Node/npm required):
+
+```bash
+docker compose --profile dev up tsc-watch
+```
+
+This mounts `./src/` into the container and recompiles `content.ts → content.js` on every save. Leave it running in a terminal, then right-click `src/index.html` and choose **Open with Live Server** in another window.
 
 - `src/index.html` — real profile (default)
 - `src/index.html?profile=anon` — anonymized profile
 
-The browser will auto-reload on every save.
+If you do have npm installed locally, `npm install && npm run watch` works too.
 
 ### Generate PDFs
 
@@ -65,33 +73,36 @@ Both PDFs will be written to `./build/`. The `build/` folder is created automati
 
 ## How it works
 
-All resume data is defined in `src/content.js` as a `profiles` object. `profiles.real` holds the full content. `profiles.anon` spreads over `real` and overrides only personal fields — company names, contact info, location, and education details. Bullet points that mention identifying names have a separate `anonBullets` field on that entry.
+All resume data is defined in `src/content.ts` as a typed `profiles` object. `profiles.real` holds the full content. `profiles.anon` spreads over `real` and overrides only personal fields — company names, contact info, location, and education details. Bullet points that mention identifying names have a separate `anonBullets` field on that entry.
 
 `src/index.html` is a thin shell with empty containers. An inline script reads the `?profile=` URL param and calls `populate()` to fill in the page at load time. This means the live browser preview and the PDF share the same JS rendering path.
 
-`generate.js` launches Chromium via Puppeteer, loads the page as a `file://` URL, and calls `page.pdf()` with zero page margins — all spacing is handled by the CSS `.page` padding so the full-bleed header renders correctly.
+`generate.ts` launches Chromium via Puppeteer, loads the page as a `file://` URL, and calls `page.pdf()` with zero page margins — all spacing is handled by the CSS `.page` padding so the full-bleed header renders correctly. `tsc` compiles both `.ts` files to `.js` before anything runs.
 
 ```mermaid
 flowchart TD
-    content["src/content.js (all resume data)"]
+    contentts["src/content.ts (TypeScript source)"]
+    contentjs["src/content.js (compiled)"]
     html["src/index.html (thin shell)"]
     fonts["src/fonts/ (self-hosted TTFs)"]
+
+    contentts -->|tsc| contentjs
 
     subgraph preview["Live Preview (editing)"]
         LS["Live Server"]
         BR["Browser ?profile=real or ?profile=anon"]
         html --> LS --> BR
-        content -->|loaded as script| BR
+        contentjs -->|loaded as script| BR
         fonts -->|loaded locally| BR
     end
 
     subgraph docker["PDF Generation (Docker)"]
         DC["docker compose up --build"]
         IMG["node:20-slim + Chromium + Puppeteer"]
-        GEN["generate.js real → MiguelCruz_Resume.pdf generate.js anon  → JohnDoe_Resume.pdf"]
+        GEN["generate.js real → MiguelCruz_Resume.pdf\ngenerate.js anon  → JohnDoe_Resume.pdf"]
         VOL[("build/")]
         DC --> IMG --> GEN --> VOL
-        content --> IMG
+        contentjs --> IMG
         html --> IMG
         fonts --> IMG
     end
@@ -99,7 +110,7 @@ flowchart TD
 
 ## Editing content
 
-Open `src/content.js`. All jobs, bullets, skills, contact info, and education are defined there.
+Open `src/content.ts`. All jobs, bullets, skills, contact info, and education are defined there as typed TypeScript objects.
 
 To scrub a field in the anon version, add it to the `profiles.anon` override at the bottom of the file. Bullet points that reference identifying names get an `anonBullets` array on the entry — the anon profile picks those up automatically and falls back to `bullets` for entries that don't need changes.
 
@@ -109,22 +120,28 @@ To scrub a field in the anon version, add it to the `profiles.anon` override at 
 .
 ├── src/
 │   ├── index.html              # Thin shell — no inline content
-│   ├── content.js              # All resume data: real + anon profiles
+│   ├── content.ts              # All resume data: real + anon profiles (TypeScript source)
+│   ├── content.js              # Compiled — generated by tsc, loaded by browser
 │   ├── style.css               # Styles and print stylesheet
 │   └── fonts/
 │       ├── geist-sans/         # Geist Sans TTFs (300, 300i, 400, 500)
 │       └── cormorant-garamond/ # Cormorant Garamond TTFs (400)
-├── generate.js                 # Puppeteer PDF generation script
-├── Dockerfile                  # node:20-slim + Chromium + puppeteer-core
+├── generate.ts                 # Puppeteer PDF generation script (TypeScript source)
+├── generate.js                 # Compiled — generated by tsc, run by Docker
+├── package.json                # Node deps: puppeteer-core, typescript, @types/node
+├── tsconfig.json               # TypeScript config
+├── Dockerfile                  # node:20-slim + Chromium; builds TS then runs generate.js
 ├── docker-compose.yml          # Two services: resume-real and resume-anon
 └── build/                      # Generated — PDFs appear here
 ```
 
 ## TODO
 
-- [x] **Separate content from markup** — All resume data lives in `src/content.js`. Edit bullet points and jobs there, never in the HTML.
+- [x] **Separate content from markup** — All resume data lives in `src/content.ts`. Edit bullet points and jobs there, never in the HTML.
 - [x] **CI/CD with GitHub Actions** — On every push to `main`, both PDFs are generated and attached as release artifacts.
 - [x] **Anonymized resume variant** — `JohnDoe_Resume.pdf` is generated automatically with company names, location, education details, and contact info scrubbed.
 - [x] **Self-hosted fonts** — Geist Sans and Cormorant Garamond TTF files are bundled in `src/fonts/` and loaded via `@font-face`. No internet dependency at runtime.
 - [ ] **PDF hot-reload watcher** — Add a `watch` service to `docker-compose.yml` that monitors source files and regenerates the PDF automatically.
-- [ ] **Content validation** — Add a pre-build step that validates the data against a schema (required fields present, dates formatted correctly, bullet points under a character limit).
+- [x] **TypeScript** — `src/content.ts` and `generate.ts` are fully typed with strict mode. `tsc` compiles to `.js` in-place.
+- [ ] **PDF hot-reload watcher** — Add a `watch` service to `docker-compose.yml` that monitors source files and regenerates the PDF automatically.
+- [ ] **Content validation** — Pre-build check that validates the data against the TypeScript interfaces (required fields present, dates formatted correctly, bullet points under a character limit).

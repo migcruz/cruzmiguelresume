@@ -1,4 +1,65 @@
-const profiles = {
+interface Meta {
+  title: string;
+  pdfFilename: string;
+}
+
+interface SocialLink {
+  handle: string;
+  url: string;
+}
+
+interface Contact {
+  email: string;
+  phone: string;
+  location: string;
+  github: SocialLink;
+  linkedin: SocialLink;
+}
+
+interface Education {
+  degree: string;
+  credential: string;
+  institution: string;
+  dates: string;
+}
+
+interface SkillGroup {
+  label: string;
+  items: string[];
+}
+
+interface Experience {
+  title: string;
+  company: string;
+  type: 'contract' | null;
+  dates: string;
+  location: string;
+  bullets: string[];
+  anonBullets?: string[];
+}
+
+interface FooterLink {
+  label: string;
+  url: string;
+}
+
+interface Footer {
+  name: string;
+  linkedin: FooterLink;
+}
+
+interface Profile {
+  meta: Meta;
+  name: string;
+  contact: Contact;
+  summary: string;
+  education: Education[];
+  skills: SkillGroup[];
+  experience: Experience[];
+  footer: Footer;
+}
+
+var profiles: Record<string, Profile> = {
   real: {
     meta: {
       title: "Miguel Cruz — Resume",
@@ -9,8 +70,8 @@ const profiles = {
       email: "miguel.vale.cruz@gmail.com",
       phone: "(604) 626-9579",
       location: "Bothell, WA",
-      github:   { handle: "migcruz",          url: "https://github.com/migcruz" },
-      linkedin: { handle: "miguelramoncruz",  url: "https://linkedin.com/in/miguelramoncruz" }
+      github:   { handle: "migcruz",         url: "https://github.com/migcruz" },
+      linkedin: { handle: "miguelramoncruz", url: "https://linkedin.com/in/miguelramoncruz" }
     },
     summary: "Embedded systems engineer with 7+ years of experience across consumer electronics, wearables, and IoT. Specializes in silicon bring-up, production-grade driver development, and bootloader/firmware architecture on Zephyr RTOS and UEFI. Proven track record building CI/CD pipelines and test frameworks that raise firmware reliability and performance in embedded systems.",
     education: [
@@ -80,9 +141,9 @@ const profiles = {
           "Owned and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple Surface device generations, ensuring cross-SoC compatibility and secure update delivery as hardware platforms evolved."
         ],
         anonBullets: [
-          "Developed a TPM firmware update driver in C for a new chip vendor, enabling Large Tech Company devices to meet Windows 11 TPM 2.0 compliance requirements ahead of the OS rollout.",
-          "Owned and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple Surface device generations, ensuring cross-SoC compatibility and secure update delivery as hardware platforms evolved."
-        ],
+          "Developed a TPM firmware update driver in C for a new chip vendor, enabling products from a large technology company to meet Windows 11 TPM 2.0 compliance requirements ahead of the OS rollout.",
+          "Owned and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple device generations, ensuring cross-SoC compatibility and secure update delivery as hardware platforms evolved."
+        ]
       },
       {
         title: "Software Development Engineer",
@@ -94,7 +155,7 @@ const profiles = {
           "Led a team of 3 engineers to build and maintain an automated UEFI test lab for Microsoft Surface devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing build failures within 24 hours of commit."
         ],
         anonBullets: [
-          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for Large Tech Company devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing build failures within 24 hours of commit."
+          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for a large technology company's devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing build failures within 24 hours of commit."
         ]
       }
     ],
@@ -127,8 +188,8 @@ profiles.anon = {
   experience: profiles.real.experience.map(job => ({
     ...job,
     company: "Large Technology Company",
-    location: "Techville, USA",
-    bullets: job.anonBullets || job.bullets
+    location: "USA",
+    bullets: job.anonBullets ?? job.bullets
   })),
   footer: {
     name: "JOHN DOE",

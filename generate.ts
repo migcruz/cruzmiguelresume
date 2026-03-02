@@ -1,9 +1,14 @@
-const puppeteer = require('puppeteer-core');
-const path = require('path');
+import puppeteer from 'puppeteer-core';
+import path from 'path';
 
-async function generate(profile) {
+interface Meta {
+  title: string;
+  pdfFilename: string;
+}
+
+async function generate(profile: string): Promise<void> {
   const browser = await puppeteer.launch({
-    executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium',
+    executablePath: process.env['CHROMIUM_PATH'] ?? '/usr/bin/chromium',
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
   });
 
@@ -11,7 +16,10 @@ async function generate(profile) {
   const url = `file://${path.resolve(__dirname, 'src/index.html')}?profile=${profile}`;
   await page.goto(url, { waitUntil: 'networkidle0' });
 
-  const meta = await page.evaluate(p => profiles[p].meta, profile);
+  // profiles is a global injected by src/content.js in the browser context
+  const meta = await page.evaluate((p: string): Meta => {
+    return (globalThis as unknown as { profiles: Record<string, { meta: Meta }> }).profiles[p].meta;
+  }, profile);
 
   await page.pdf({
     path: `/build/${meta.pdfFilename}`,
@@ -24,7 +32,7 @@ async function generate(profile) {
   console.log(`Generated: /build/${meta.pdfFilename}`);
 }
 
-generate(process.argv[2] || 'real').catch(err => {
+generate(process.argv[2] ?? 'real').catch((err: unknown) => {
   console.error(err);
   process.exit(1);
 });

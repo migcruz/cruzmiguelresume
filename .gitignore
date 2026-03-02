@@ -1,1 +1,6 @@
 build/
+node_modules/
+
+# TypeScript compiled output
+src/content.js
+generate.js
