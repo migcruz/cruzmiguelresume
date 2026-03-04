@@ -79,7 +79,7 @@ var profiles: Record<string, Profile> = {
         degree: "Mechatronic Systems Engineering",
         credential: "Bachelor of Applied Science",
         institution: "Simon Fraser University",
-        dates: "2012 — 2016"
+        dates: ""
       }
     ],
     skills: [
