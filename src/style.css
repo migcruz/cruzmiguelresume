@@ -155,7 +155,6 @@ section h2 {
 /* ─────────────────────────────────────────────────────────
    EDUCATION
 ───────────────────────────────────────────────────────── */
-.sidebar section:has(.entry) { margin-top: 45px; } /* tune to align with Professional Experience h2 */
 .sidebar section:has(.entry) h2 { font-size: 14px; }
 
 .sidebar .entry-title {

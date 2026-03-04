@@ -73,7 +73,7 @@ var profiles: Record<string, Profile> = {
       github:   { handle: "migcruz",         url: "https://github.com/migcruz" },
       linkedin: { handle: "miguelramoncruz", url: "https://linkedin.com/in/miguelramoncruz" }
     },
-    summary: "Embedded systems engineer with 7+ years of experience across consumer electronics, wearables, and IoT. Specializes in silicon bring-up, production-grade driver development, and bootloader/firmware architecture on Zephyr RTOS and UEFI. Proven track record building CI/CD pipelines and test frameworks that raise firmware reliability and performance in embedded systems.",
+    summary: "Embedded systems engineer with 7+ years of experience spanning silicon bring-up, RTOS driver architecture, UEFI/BIOS firmware, and secure update systems across consumer electronics and IoT platforms. Proven track record designing production-grade firmware stacks and CI/HIL validation infrastructure. Actively leveraging AI-assisted tooling and multi-agent workflows to accelerate debugging, automate hardware validation, and improve firmware development velocity.",
     education: [
       {
         degree: "Mechatronic Systems Engineering",
@@ -99,7 +99,7 @@ var profiles: Record<string, Profile> = {
         location: "Redmond, WA, USA",
         bullets: [
           "Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem on a custom multi-MCU SoC by translating bare-metal validation flows into production Zephyr RTOS drivers for C/D-PHY initialization. This included explicit power-domain sequencing and clock-tree initialization ordering to achieve first display output on new silicon, a critical hardware validation gate for the program.",
-          "Debugged and resolved critical silicon bring-up issues, including bus faults from power domain sequencing violations and read-modify-write hazards on certain registers; the resulting defensive initialization patterns were adopted across the team to prevent recurrence in future bring-up cycles.",
+          "Implemented a multi-agent AI debug workflow to accelerate early-silicon bring-up, parsing register-dump logs into structured summaries and applying register-map-aware reasoning to suggest initialization fixes for power-domain sequencing violations and RMW register hazards. Reduced manual log triage and shortened iterative debug cycles, contributing to defensive initialization patterns adopted across the team.",
           "Designed and prototyped a memory-to-peripheral DMA triple-buffering system on Zephyr RTOS, validating the architecture as a viable path to meeting the program's display pipeline throughput requirements."
         ]
       },
@@ -152,10 +152,10 @@ var profiles: Record<string, Profile> = {
         dates: "Apr. 2018 — Oct. 2019",
         location: "Redmond, WA, USA",
         bullets: [
-          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for Microsoft Surface devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing build failures within 24 hours of commit."
+          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for Microsoft Surface devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing boot failures within 24 hours."
         ],
         anonBullets: [
-          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for a large technology company's devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing build failures within 24 hours of commit."
+          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for a large technology company's devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing boot failures within 24 hours."
         ]
       }
     ],
