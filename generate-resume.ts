@@ -13,10 +13,10 @@ async function generate(profile: string): Promise<void> {
   });
 
   const page = await browser.newPage();
-  const url = `file://${path.resolve(__dirname, 'src/index.html')}?profile=${profile}`;
+  const url = `file://${path.resolve(__dirname, 'src/resume/index.html')}?profile=${profile}`;
   await page.goto(url, { waitUntil: 'networkidle0' });
 
-  // profiles is a global injected by src/content.js in the browser context
+  // profiles is a global injected by src/resume/content.js in the browser context
   const meta = await page.evaluate((p: string): Meta => {
     return (globalThis as unknown as { profiles: Record<string, { meta: Meta }> }).profiles[p].meta;
   }, profile);

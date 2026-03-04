@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Resume</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="content.js"></script>
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <h1 id="resume-name"></h1>
+    </header>
+
+    <div class="body-columns">
+
+      <aside class="sidebar">
+
+        <section>
+          <h2>Contact</h2>
+          <ul class="contact" id="contact-list"></ul>
+        </section>
+
+        <section>
+          <h2>Education</h2>
+          <div id="education-container"></div>
+        </section>
+
+        <section>
+          <h2>Skills</h2>
+          <div id="skills-container"></div>
+        </section>
+
+      </aside>
+
+      <main class="main-col">
+
+        <section>
+          <h2>Professional Summary</h2>
+          <p id="summary-text"></p>
+        </section>
+
+        <section>
+          <h2>Professional Experience</h2>
+          <div id="experience-container"></div>
+        </section>
+
+      </main>
+
+    </div><!-- /.body-columns -->
+
+    <footer class="page-footer" id="resume-footer"></footer>
+
+  </div><!-- /.page -->
+
+  <div class="print-button no-print">
+    <button onclick="window.print()">Save as PDF</button>
+  </div>
+
+  <script>
+    const GITHUB_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="9" height="9"><path fill="currentColor" d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>`;
+
+    const LINKEDIN_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="9" height="9"><rect width="24" height="24" rx="4" fill="#283135"/><path fill="white" d="M6.94 5a2 2 0 1 1-4-.002A2 2 0 0 1 6.94 5zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68z"/></svg>`;
+
+    function populate(p) {
+      document.title = p.meta.title;
+      document.getElementById('page-title').textContent = p.meta.title;
+      document.getElementById('resume-name').textContent = p.name;
+      document.getElementById('summary-text').textContent = p.summary;
+
+      // Contact
+      const cl = document.getElementById('contact-list');
+      cl.innerHTML = `
+        <li>${p.contact.email}</li>
+        <li>${p.contact.phone}</li>
+        <li>${p.contact.location}</li>
+        <li class="contact-github">
+          <a href="${p.contact.github.url}">${GITHUB_ICON} ${p.contact.github.handle}</a>
+        </li>
+        <li class="contact-linkedin">
+          <a href="${p.contact.linkedin.url}">${LINKEDIN_ICON} ${p.contact.linkedin.handle}</a>
+        </li>
+      `;
+
+      // Education
+      document.getElementById('education-container').innerHTML = p.education.map(e => `
+        <div class="entry">
+          <div class="entry-title">${e.degree}</div>
+          <div class="entry-degree">${e.credential}</div>
+          <div class="entry-date">${e.dates}</div>
+          <div class="entry-sub"><span class="entry-company">${e.institution}</span></div>
+        </div>
+      `).join('');
+
+      // Skills
+      document.getElementById('skills-container').innerHTML = p.skills.map(g => `
+        <div class="skill-group">
+          <span class="skill-label">${g.label}</span>
+          <ul class="skill-list">
+            ${g.items.map(i => `<li>${i}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+
+      // Experience
+      document.getElementById('experience-container').innerHTML = p.experience.map(job => {
+        const companyLabel = job.type === 'contract'
+          ? `${job.company} (contract)`
+          : job.company;
+        return `
+          <div class="entry">
+            <div class="entry-header">
+              <span class="entry-title">${job.title}</span>
+              <span class="entry-date">${job.dates}</span>
+            </div>
+            <div class="entry-sub">
+              <span class="entry-company">${companyLabel}</span>
+              <span class="entry-location">${job.location}</span>
+            </div>
+            <ul>
+              ${job.bullets.map(b => `<li>${b}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }).join('');
+
+      // Footer
+      document.getElementById('resume-footer').innerHTML = `
+        <span>${p.footer.name}</span>
+        <span><a href="${p.footer.linkedin.url}">${p.footer.linkedin.label}</a></span>
+      `;
+    }
+
+    const profile = new URLSearchParams(window.location.search).get('profile') || 'real';
+    populate(profiles[profile]);
+  </script>
+</body>
+</html>

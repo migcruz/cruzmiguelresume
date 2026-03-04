@@ -3,13 +3,19 @@ services:
     build: .
     volumes:
       - ./build:/build
-    command: ["node", "generate.js", "real"]
+    command: ["node", "generate-resume.js", "real"]
 
   resume-anon:
     build: .
     volumes:
       - ./build:/build
-    command: ["node", "generate.js", "anon"]
+    command: ["node", "generate-resume.js", "anon"]
+
+  cover-letter-real:
+    build: .
+    volumes:
+      - ./build:/build
+    command: ["node", "generate-cover-letter.js", "real"]
 
   tsc-watch:
     build: .

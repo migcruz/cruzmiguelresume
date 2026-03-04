@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="page-title">Resume</title>
+  <title id="page-title">Cover Letter</title>
+  <link rel="stylesheet" href="../style.css" />
   <link rel="stylesheet" href="style.css" />
   <script src="content.js"></script>
 </head>
@@ -11,7 +12,7 @@
   <div class="page">
 
     <header>
-      <h1 id="resume-name"></h1>
+      <h1 id="cover-letter-name"></h1>
     </header>
 
     <div class="body-columns">
@@ -24,13 +25,8 @@
         </section>
 
         <section>
-          <h2>Education</h2>
-          <div id="education-container"></div>
-        </section>
-
-        <section>
-          <h2>Skills</h2>
-          <div id="skills-container"></div>
+          <h2>Recipient</h2>
+          <ul class="recipient-list" id="recipient-list"></ul>
         </section>
 
       </aside>
@@ -38,20 +34,21 @@
       <main class="main-col">
 
         <section>
-          <h2>Professional Summary</h2>
-          <p id="summary-text"></p>
+          <h2 id="letter-date"></h2>
         </section>
 
-        <section>
-          <h2>Professional Experience</h2>
-          <div id="experience-container"></div>
-        </section>
+        <p class="letter-greeting" id="letter-greeting"></p>
+
+        <div id="letter-paragraphs"></div>
+
+        <p class="letter-closing" id="letter-closing"></p>
+        <p class="letter-signature" id="letter-signature"></p>
 
       </main>
 
     </div><!-- /.body-columns -->
 
-    <footer class="page-footer" id="resume-footer"></footer>
+    <footer class="page-footer" id="cover-letter-footer"></footer>
 
   </div><!-- /.page -->
 
@@ -67,12 +64,11 @@
     function populate(p) {
       document.title = p.meta.title;
       document.getElementById('page-title').textContent = p.meta.title;
-      document.getElementById('resume-name').textContent = p.name;
-      document.getElementById('summary-text').textContent = p.summary;
+      document.getElementById('cover-letter-name').textContent = p.name;
+      document.getElementById('letter-date').textContent = p.date;
 
       // Contact
-      const cl = document.getElementById('contact-list');
-      cl.innerHTML = `
+      document.getElementById('contact-list').innerHTML = `
         <li>${p.contact.email}</li>
         <li>${p.contact.phone}</li>
         <li>${p.contact.location}</li>
@@ -84,57 +80,33 @@
         </li>
       `;
 
-      // Education
-      document.getElementById('education-container').innerHTML = p.education.map(e => `
-        <div class="entry">
-          <div class="entry-title">${e.degree}</div>
-          <div class="entry-degree">${e.credential}</div>
-          <div class="entry-date">${e.dates}</div>
-          <div class="entry-sub"><span class="entry-company">${e.institution}</span></div>
-        </div>
-      `).join('');
+      // Recipient
+      document.getElementById('recipient-list').innerHTML = `
+        <li>${p.recipient.company}</li>
+        <li>${p.recipient.address}</li>
+        <li>${p.recipient.location}</li>
+        <li>${p.recipient.phone}</li>
+        <li>${p.recipient.email}</li>
+      `;
 
-      // Skills
-      document.getElementById('skills-container').innerHTML = p.skills.map(g => `
-        <div class="skill-group">
-          <span class="skill-label">${g.label}</span>
-          <ul class="skill-list">
-            ${g.items.map(i => `<li>${i}</li>`).join('')}
-          </ul>
-        </div>
-      `).join('');
+      document.getElementById('letter-greeting').textContent = p.greeting;
 
-      // Experience
-      document.getElementById('experience-container').innerHTML = p.experience.map(job => {
-        const companyLabel = job.type === 'contract'
-          ? `${job.company} (contract)`
-          : job.company;
-        return `
-          <div class="entry">
-            <div class="entry-header">
-              <span class="entry-title">${job.title}</span>
-              <span class="entry-date">${job.dates}</span>
-            </div>
-            <div class="entry-sub">
-              <span class="entry-company">${companyLabel}</span>
-              <span class="entry-location">${job.location}</span>
-            </div>
-            <ul>
-              ${job.bullets.map(b => `<li>${b}</li>`).join('')}
-            </ul>
-          </div>
-        `;
-      }).join('');
+      document.getElementById('letter-paragraphs').innerHTML = p.paragraphs
+        .map(para => `<p class="letter-para">${para}</p>`)
+        .join('');
+
+      document.getElementById('letter-closing').textContent = p.closing;
+      document.getElementById('letter-signature').textContent = p.name;
 
       // Footer
-      document.getElementById('resume-footer').innerHTML = `
+      document.getElementById('cover-letter-footer').innerHTML = `
         <span>${p.footer.name}</span>
         <span><a href="${p.footer.linkedin.url}">${p.footer.linkedin.label}</a></span>
       `;
     }
 
     const profile = new URLSearchParams(window.location.search).get('profile') || 'real';
-    populate(profiles[profile]);
+    populate(coverLetterProfiles[profile]);
   </script>
 </body>
 </html>

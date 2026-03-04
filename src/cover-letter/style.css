@@ -1,0 +1,47 @@
+/* ── Sidebar section h2 sizes ───────────────────────────── */
+.sidebar section:has(.recipient-list) h2 { font-size: 14px; }
+
+/* ── Recipient list ─────────────────────────────────────── */
+.recipient-list {
+  list-style: none;
+  font-size: 10px;
+  color: #283135;
+}
+
+.recipient-list li {
+  margin-bottom: 4px;
+}
+
+/* ── Letter content (main column) ───────────────────────── */
+.main-col .letter-greeting,
+.main-col .letter-para,
+.main-col .letter-closing,
+.main-col .letter-signature {
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.letter-greeting {
+  margin-bottom: 4mm;
+}
+
+.letter-para {
+  margin-bottom: 4mm;
+}
+
+.letter-closing {
+  margin-top: 6mm;
+}
+
+.letter-signature {
+  margin-top: 8mm;
+}
+
+/* ── Print overrides ────────────────────────────────────── */
+@media print {
+  .page {
+    display: flex;
+    flex-direction: column;
+    height: 297mm;
+  }
+}

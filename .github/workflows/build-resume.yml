@@ -20,8 +20,8 @@ jobs:
       - name: Generate PDFs
         run: |
           mkdir -p build
-          docker run --rm -v ${{ github.workspace }}/build:/build resume node generate.js real
-          docker run --rm -v ${{ github.workspace }}/build:/build resume node generate.js anon
+          docker run --rm -v ${{ github.workspace }}/build:/build resume node generate-resume.js real
+          docker run --rm -v ${{ github.workspace }}/build:/build resume node generate-resume.js anon
 
       - name: Upload PDFs to latest release
         uses: softprops/action-gh-release@v2

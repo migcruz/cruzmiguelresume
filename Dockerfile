@@ -8,10 +8,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 COPY package.json tsconfig.json ./
 COPY src/ ./src/
-COPY generate.ts .
+COPY generate-resume.ts generate-cover-letter.ts ./
 
 RUN npm install && npm run build
 
 ENV CHROMIUM_PATH=/usr/bin/chromium
 
-CMD ["node", "generate.js", "real"]
+CMD ["node", "generate-resume.js", "real"]
