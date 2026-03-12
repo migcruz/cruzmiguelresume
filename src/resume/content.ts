@@ -98,9 +98,9 @@ var profiles: Record<string, Profile> = {
         dates: "Oct. 2025 — Feb. 2026",
         location: "Redmond, WA, USA",
         bullets: [
-          "Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem on a custom multi-MCU SoC by translating bare-metal validation flows into production Zephyr RTOS drivers for C/D-PHY initialization. This included explicit power-domain sequencing and clock-tree initialization ordering to achieve first display output on new silicon, a critical hardware validation gate for the program.",
-          "Implemented a multi-agent AI debug workflow to accelerate early-silicon bring-up, parsing register-dump logs into structured summaries and applying register-map-aware reasoning to suggest initialization fixes for power-domain sequencing violations and RMW register hazards. Reduced manual log triage and shortened iterative debug cycles, contributing to defensive initialization patterns adopted across the team.",
-          "Designed and prototyped a memory-to-peripheral DMA triple-buffering system on Zephyr RTOS, validating the architecture as a viable path to meeting the program's display pipeline throughput requirements."
+          "Spearheaded the post-silicon bring-up of a MIPI DSI display subsystem on a custom multi-MCU SoC by translating bare-metal validation flows into production Zephyr RTOS drivers for C/D-PHY initialization in C. This included explicit power-domain sequencing and clock-tree initialization ordering to achieve first display output on new silicon, a critical hardware validation gate for the program.",
+          "Implemented a multi-agent AI debug workflow in Python to accelerate early-silicon bring-up, parsing register-dump logs into structured summaries and applying register-map-aware reasoning to suggest initialization fixes for power-domain sequencing violations and RMW register hazards. Reduced manual log triage and shortened iterative debug cycles, contributing to defensive initialization patterns adopted across the team.",
+          "Designed and prototyped a memory-to-peripheral DMA triple-buffering system on Zephyr RTOS in C, validating the architecture as a viable path to meeting the program's display pipeline throughput requirements."
         ]
       },
       {
@@ -110,11 +110,11 @@ var profiles: Record<string, Profile> = {
         dates: "Jun. 2025 — Oct. 2025",
         location: "Redmond, WA, USA",
         bullets: [
-          "Integrated Qualcomm BSPs for audio subsystems on Microsoft Surface devices, performing functional smoke testing and coordinating with Qualcomm and internal Microsoft teams to resolve issues spanning BSP defects, UEFI firmware layers, and OS-level driver behavior across different Windows builds.",
+          "Integrated Qualcomm BSPs for audio subsystems on Microsoft Surface devices, performing functional smoke testing in Python and coordinating with Qualcomm and internal Microsoft teams to resolve issues spanning BSP defects, UEFI firmware layers, and OS-level driver behavior across different Windows builds.",
           "Authored knowledge transfer documentation and training materials to enable a smooth handoff to an offshore team, ensuring continuity of audio driver bring-up and DVE validation workflows."
         ],
         anonBullets: [
-          "Integrated Qualcomm BSPs for audio subsystems on next-generation devices, performing functional smoke testing and coordinating with the chipset vendor and internal teams to resolve issues spanning BSP defects, UEFI firmware layers, and OS-level driver behavior across different OS builds.",
+          "Integrated Qualcomm BSPs for audio subsystems on next-generation devices, performing functional smoke testing in Python and coordinating with the chipset vendor and internal teams to resolve issues spanning BSP defects, UEFI firmware layers, and OS-level driver behavior across different OS builds.",
           "Authored knowledge transfer documentation and training materials to enable a smooth handoff to an offshore team, ensuring continuity of audio driver bring-up and DVE validation workflows."
         ]
       },
@@ -126,8 +126,8 @@ var profiles: Record<string, Profile> = {
         location: "Redmond, WA, USA",
         bullets: [
           "Integrated and commonized MCUBoot across the firmware codebase by developing a shared wrapper module that encapsulates bootloader configuration and exposes a clean interface for per-project build flag injection, eliminating duplicated bootloader instances; adopted by 3 projects before handoff.",
-          "Designed and implemented an NVS-backed configuration system for a universal debug board on an STM32 Cortex-M7 with Zephyr RTOS, enabling end users to persist custom workflow configurations across power cycles while also supporting per-device serial numbers and batch-specific factory provisioning.",
-          "Developed and deployed CI/CD pipelines and a two-tier automated test suite for embedded firmware, combining unit tests with hardware-mocked I2C/SPI/NVS/GPIO interfaces on PRs and daily system-level hardware-in-the-loop tests via Robot Framework, surfacing regressions within 24 hours of check-in."
+          "Designed and implemented an NVS-backed configuration system for a universal debug board on an STM32 Cortex-M7 with Zephyr RTOS in C, enabling end users to persist custom workflow configurations across power cycles while also supporting per-device serial numbers and batch-specific factory provisioning.",
+          "Developed and deployed CI/CD pipelines and a two-tier automated test suite for embedded firmware in Python and C++, combining unit tests with hardware-mocked I2C/SPI/NVS/GPIO interfaces on PRs and daily system-level hardware-in-the-loop tests via Robot Framework, surfacing regressions within 24 hours of check-in."
         ]
       },
       {
@@ -141,7 +141,7 @@ var profiles: Record<string, Profile> = {
           "Owned and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple Surface device generations, ensuring cross-SoC compatibility and secure update delivery as hardware platforms evolved."
         ],
         anonBullets: [
-          "Developed a TPM firmware update driver in C for a new chip vendor, enabling products from a large technology company to meet Windows 11 TPM 2.0 compliance requirements ahead of the OS rollout.",
+          "Developed a TPM firmware update driver in C for a new chip vendor, enabling BigTechCorp consumer devices to meet Windows 11 TPM 2.0 compliance requirements ahead of the OS rollout.",
           "Owned and maintained firmware update drivers (UEFI, Intel CSME, TPM, MCU) across multiple device generations, ensuring cross-SoC compatibility and secure update delivery as hardware platforms evolved."
         ]
       },
@@ -152,10 +152,10 @@ var profiles: Record<string, Profile> = {
         dates: "Apr. 2018 — Oct. 2019",
         location: "Redmond, WA, USA",
         bullets: [
-          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for Microsoft Surface devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing boot failures within 24 hours."
+          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for Microsoft Surface devices in Python, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing boot failures within 24 hours."
         ],
         anonBullets: [
-          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for a large technology company's devices, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing boot failures within 24 hours."
+          "Led a team of 3 engineers to build and maintain an automated UEFI test lab for BigTechCorp devices in Python, running nightly regression gauntlets across device SKUs via Azure DevOps and surfacing boot failures within 24 hours."
         ]
       }
     ],
@@ -187,7 +187,7 @@ profiles.anon = {
   })),
   experience: profiles.real.experience.map(job => ({
     ...job,
-    company: "Large Technology Company",
+    company: "BigTechCorp",
     location: "Techville, USA",
     bullets: job.anonBullets ?? job.bullets
   })),
