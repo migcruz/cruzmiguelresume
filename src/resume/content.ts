@@ -86,7 +86,7 @@ var profiles: Record<string, Profile> = {
       { label: "Programming Languages", items: ["C/C++", "Python"] },
       { label: "RTOS & Frameworks",     items: ["Zephyr", "FreeRTOS", "UEFI"] },
       { label: "Infrastructure",        items: ["Docker", "Azure DevOps", "CMake", "Robot Framework"] },
-      { label: "Protocols",             items: ["UART", "I2C", "SPI", "CAN", "DSI2/CSI2 (C-PHY/D-PHY)", "Bluetooth"] },
+      { label: "Protocols",             items: ["UART", "I2C", "SPI", "CAN", "DSI2/CSI2 (C-PHY/D-PHY)", "Bluetooth", "I2S (PDM)"] },
       { label: "Microcontrollers",      items: ["ARM Cortex-M", "STM32", "Nordic nRF54"] },
       { label: "Tools",                 items: ["JTAG/SWD + GDB", "Logic Analyzer", "Oscilloscope"] }
     ],
