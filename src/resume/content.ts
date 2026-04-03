@@ -111,11 +111,11 @@ var profiles: Record<string, Profile> = {
         location: "Redmond, WA, USA",
         bullets: [
           "Integrated Qualcomm BSPs for audio subsystems on Microsoft Surface devices, performing functional smoke testing in Python and coordinating with Qualcomm and internal Microsoft teams to resolve issues spanning BSP defects, UEFI firmware layers, and OS-level driver behavior across different Windows builds.",
-          "Authored knowledge transfer documentation and training materials to enable a smooth handoff to an offshore team, ensuring continuity of audio driver bring-up and DVE validation workflows."
+          "Authored knowledge transfer documentation and training materials to enable a smooth handoff to an offshore team."
         ],
         anonBullets: [
           "Integrated Qualcomm BSPs for audio subsystems on next-generation devices, performing functional smoke testing in Python and coordinating with the chipset vendor and internal teams to resolve issues spanning BSP defects, UEFI firmware layers, and OS-level driver behavior across different OS builds.",
-          "Authored knowledge transfer documentation and training materials to enable a smooth handoff to an offshore team, ensuring continuity of audio driver bring-up and DVE validation workflows."
+          "Authored knowledge transfer documentation and training materials to enable a smooth handoff to an offshore team."
         ]
       },
       {
@@ -127,7 +127,8 @@ var profiles: Record<string, Profile> = {
         bullets: [
           "Integrated and commonized MCUBoot across the firmware codebase by developing a shared wrapper module that encapsulates bootloader configuration and exposes a clean interface for per-project build flag injection, eliminating duplicated bootloader instances; adopted by 3 projects before handoff.",
           "Designed and implemented an NVS-backed configuration system for a universal debug board on an STM32 Cortex-M7 with Zephyr RTOS in C, enabling end users to persist custom workflow configurations across power cycles while also supporting per-device serial numbers and batch-specific factory provisioning.",
-          "Developed and deployed CI/CD pipelines and a two-tier automated test suite for embedded firmware in Python and C++, combining unit tests with hardware-mocked I2C/SPI/NVS/GPIO interfaces on PRs and daily system-level hardware-in-the-loop tests via Robot Framework, surfacing regressions within 24 hours of check-in."
+          "Developed and deployed CI/CD pipelines and a two-tier automated test suite for embedded firmware in Python and C++, combining unit tests with hardware-mocked I2C/SPI/NVS/GPIO interfaces on PRs and daily system-level hardware-in-the-loop tests via Robot Framework, surfacing regressions within 24 hours of check-in.",
+          "Collaborated with hardware and product teams to evaluate MCU vendors and Zephyr RTOS feature support."
         ]
       },
       {
